@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
-import {
-    Button,
-    TextInput,
-    View,
-    StyleSheet
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Button from '../atoms/button.js';
+import Input from '../atoms/input.js';
 
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center'
-    },
-    input: {
-        height: 50,
-        borderWidth: 1,
-        width: 200
     }
 });
 
@@ -24,25 +16,20 @@ export default function Login() {
     const [password, setPassword] = useState();
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.input}
+            <Input
+                type="text"
                 value={username}
                 onChangeText={(text) => setUsername(text)}
-                autoCompleteType="username"
-                textContentType="username"
             />
-            <TextInput
-                style={styles.input}
+            <Input
+                type="password"
                 value={password}
                 onChangeText={(text) => setPassword(text)}
-                autoCompleteType="password"
-                textContentType="password"
-                secureTextEntry
             />
             <Button
-                onPress={() => null}
-                title="Login"
-                accessibilityLabel="Submit login form"
+                text="Login"
+                accessibility="Submit login form"
+                onPress={() => {}}
             />
         </View>
     );

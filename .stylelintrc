@@ -12,6 +12,7 @@
     "ignoreFiles": [
         ".expo/**/*",
         ".expo-shared/**/*",
-        "node_modules/**/*"
+        "node_modules/**/*",
+        "**/*.js"
     ]
 }
