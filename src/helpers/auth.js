@@ -1,101 +1,32 @@
-import React, {
-    useContext,
-    useEffect,
-    useReducer,
-    createContext
-} from 'react';
-import SecureStore from 'expo-secure-store';
+import React, { createContext, useState, useContext } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import PropTypes from 'prop-types';
 
-const AuthContext = createContext({
-    isAuth: false,
-    userId: null,
-    token: null,
-    login: () => {},
-    logout: () => {}
-});
-
-const authReducer = async (state, { type, token, userId }) => {
-    switch (type) {
-        case 'login':
-            await SecureStore.setItemAsync('token', token);
-            await SecureStore.setItemAsync('userId', userId);
-            return {
-                ...state,
-                isAuth: true,
-                token,
-                userId
-            };
-        case 'logout':
-        default:
-            await SecureStore.deleteItemAsync('token');
-            await SecureStore.deleteItemAsync('userId');
-            return {
-                ...state,
-                isAuth: false,
-                token: null,
-                userId: null
-            };
-    }
-};
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [state, dispatch] = useReducer(authReducer, {
-        isAuth: false,
-        userId: null,
-        token: null
-    });
-    useEffect(() => {
-        const initState = async () => {
-            try {
-                const token = await SecureStore.getItemAsync('token');
-                const userId = await SecureStore.getItemAsync('userId');
-                if (token && userId) {
-                    dispatch({
-                        type: 'login',
-                        userId,
-                        token
-                    });
-                } else {
-                    dispatch({
-                        type: 'logout'
-                    });
-                }
-            } catch {
-                dispatch({
-                    type: 'logout'
-                });
-            }
-        };
-        initState();
-    }, [state, dispatch]);
-    const actions = React.useMemo(
-        () => ({
-            login: async (/* { username, password } */) => {
-                try {
-                    // TODO perform auth
-                    const token = 'XXXXXXXXXX';
-                    const userId = 'XXXXXXXXXX';
-                    dispatch({
-                        type: 'login',
-                        userId,
-                        token
-                    });
-                } catch (err) {
-                    dispatch({
-                        type: 'logout'
-                    });
-                }
-            },
-            logout: () => dispatch({
-                type: 'logout'
-            })
-        }),
-        [state, dispatch]
-    );
-
+    const [authData, setAuthData] = useState(null);
+    const login = async (username, password) => {
+        try {
+            const token = `TOKEN-${username}-${password}`;
+            const userId = `ID-${username}-${password}`;
+            await SecureStore.setItemAsync('token', token);
+            setAuthData({
+                userId,
+                username,
+                token
+            });
+        } catch (err) {
+            await SecureStore.deleteItemAsync('token');
+            setAuthData(null);
+        }
+    };
+    const logout = async () => {
+        await SecureStore.deleteItemAsync('token');
+        setAuthData(null);
+    };
     return (
-        <AuthContext.Provider value={{ ...state, ...actions }}>
+        <AuthContext.Provider value={{ authData, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
@@ -105,6 +36,10 @@ AuthProvider.propTypes = {
     children: PropTypes.element.isRequired
 };
 
-export const useAuth = () => (
-    useContext(AuthContext)
-);
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+}

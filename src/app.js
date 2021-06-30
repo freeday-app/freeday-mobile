@@ -1,29 +1,13 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { registerRootComponent } from 'expo';
 
-import { AuthProvider, useAuth } from './helpers/auth.js';
-import Login from './components/views/login.js';
-import Home from './components/views/home.js';
-import Daysoff from './components/views/daysoff.js';
-
-const Drawer = createDrawerNavigator();
+import { AuthProvider } from './helpers/auth.js';
+import Router from './helpers/router.js';
 
 function App() {
-    const { isAuth } = useAuth();
     return (
         <AuthProvider>
-            {isAuth ? (
-                <NavigationContainer>
-                    <Drawer.Navigator initialRouteName="Home">
-                        <Drawer.Screen name="Home" component={Home} />
-                        <Drawer.Screen name="Daysoff" component={Daysoff} />
-                    </Drawer.Navigator>
-                </NavigationContainer>
-            ) : (
-                <Login />
-            )}
+            <Router />
         </AuthProvider>
     );
 }

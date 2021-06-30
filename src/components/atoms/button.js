@@ -12,7 +12,7 @@ export default function CustomButton(props) {
     const { text, onPress, accessibility } = props;
     return (
         <Button
-            Button={onPress}
+            onPress={onPress}
             title={text}
             accessibilityLabel={accessibility}
             styles={styles.button}

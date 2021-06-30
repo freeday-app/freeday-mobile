@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import Button from '../atoms/button.js';
 import Input from '../atoms/input.js';
 
+import { useAuth } from '../../helpers/auth.js';
+
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -14,22 +16,25 @@ const styles = StyleSheet.create({
 export default function Login() {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
+    const { login } = useAuth();
     return (
         <View style={styles.container}>
             <Input
                 type="text"
                 value={username}
-                onChangeText={(text) => setUsername(text)}
+                onChange={(text) => setUsername(text)}
             />
             <Input
                 type="password"
                 value={password}
-                onChangeText={(text) => setPassword(text)}
+                onChange={(text) => setPassword(text)}
             />
             <Button
                 text="Login"
                 accessibility="Submit login form"
-                onPress={() => {}}
+                onPress={() => {
+                    login(username, password);
+                }}
             />
         </View>
     );
