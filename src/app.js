@@ -1,13 +1,16 @@
 import React from 'react';
 import { registerRootComponent } from 'expo';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 import { AuthProvider } from './helpers/auth.js';
-import Router from './helpers/router.js';
+import Router from './components/organisms/router.js';
 
 function App() {
     return (
         <AuthProvider>
-            <Router />
+            <RootSiblingParent>
+                <Router />
+            </RootSiblingParent>
         </AuthProvider>
     );
 }

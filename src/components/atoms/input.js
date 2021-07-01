@@ -18,6 +18,7 @@ export default function Input(props) {
             value={value}
             onChangeText={onChange}
             secureTextEntry={type === 'password'}
+            autoCapitalize="none"
         />
     );
 }

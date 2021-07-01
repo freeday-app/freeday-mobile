@@ -21,6 +21,7 @@
         //     "props": false
         // }],
         "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "react/display-name": "off",
         "react/jsx-filename-extension": ["error", {
             "extensions": [".js"]
         }],

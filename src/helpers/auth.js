@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import PropTypes from 'prop-types';
+import Toast from 'react-native-root-toast';
 
 import API from './api.js';
 
@@ -12,11 +13,15 @@ export function AuthProvider({ children }) {
         await SecureStore.deleteItemAsync('tenant');
         await SecureStore.deleteItemAsync('token');
         setAuthData(null);
+        Toast.show('Authentication failed :(', {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP
+        });
     };
     const login = async (tenant, username, password) => {
         try {
-            API.tenant = tenant;
             const { userId, token } = await API.call({
+                tenant,
                 method: 'POST',
                 route: '/api/auth',
                 body: {
@@ -24,6 +29,8 @@ export function AuthProvider({ children }) {
                     password
                 }
             });
+            API.tenant = tenant;
+            API.token = token;
             await SecureStore.setItemAsync('tenant', tenant);
             await SecureStore.setItemAsync('token', token);
             setAuthData({
@@ -59,7 +66,10 @@ export function AuthProvider({ children }) {
 }
 
 AuthProvider.propTypes = {
-    children: PropTypes.element.isRequired
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.element),
+        PropTypes.element
+    ]).isRequired
 };
 
 export function useAuth() {

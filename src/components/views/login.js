@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+
 import Button from '../atoms/button.js';
 import Input from '../atoms/input.js';
-
 import { useAuth } from '../../helpers/auth.js';
 
 const styles = StyleSheet.create({
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
 });
 
 export default function Login() {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
+    const [username, setUsername] = useState('yoann.legrand');
+    const [password, setPassword] = useState('alacon');
     const { login } = useAuth();
     return (
         <View style={styles.container}>
@@ -33,7 +33,7 @@ export default function Login() {
                 text="Login"
                 accessibility="Submit login form"
                 onPress={() => {
-                    login(username, password);
+                    login('beta', username, password);
                 }}
             />
         </View>
