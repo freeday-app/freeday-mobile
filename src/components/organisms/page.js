@@ -4,17 +4,12 @@ import {
     StyleSheet,
     ScrollView
 } from 'react-native';
-import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { FontAwesome } from '@expo/vector-icons';
+import { Appbar } from 'react-native-paper';
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'flex-start',
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        justifyContent: 'center'
+        width: '100%'
     },
     scrollContainer: {
         width: '100%'
@@ -30,28 +25,12 @@ const styles = StyleSheet.create({
 export default function Page({ children, filter, onFilter }) {
     return (
         <View style={styles.container}>
-            <Header
-                // leftComponent={{
-                //     //
-                // }}
-                centerComponent={{
-                    text: 'Freeday',
-                    style: {
-                        color: 'white',
-                        fontSize: 20
-                    }
-                }}
-                rightComponent={
-                    filter ? (
-                        <FontAwesome
-                            name="filter"
-                            size={25}
-                            color="white"
-                            onPress={onFilter}
-                        />
-                    ) : null
-                }
-            />
+            <Appbar.Header>
+                <Appbar.Content title="Freeday" />
+                {filter ? (
+                    <Appbar.Action icon="filter" onPress={onFilter} />
+                ) : null}
+            </Appbar.Header>
             <ScrollView
                 style={styles.scrollContainer}
                 contentContainerStyle={styles.scrollContent}

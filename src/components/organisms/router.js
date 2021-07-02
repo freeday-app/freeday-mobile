@@ -1,54 +1,32 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome } from '@expo/vector-icons';
+import { BottomNavigation } from 'react-native-paper';
 
-import { useAuth } from '../../helpers/auth.js';
+import { useAuth } from '../contexts/auth.js';
 import Login from '../views/login.js';
 import Home from '../views/home.js';
 import Daysoff from '../views/daysoff.js';
 import Settings from '../views/settings.js';
 
-const Tab = createBottomTabNavigator();
-
 export default function Router() {
     const { authData } = useAuth();
+    const [index, setIndex] = React.useState(0);
+    const routes = [
+        { key: 'home', title: 'Home', icon: 'home' },
+        { key: 'daysoff', title: 'Daysoff', icon: 'palm-tree' },
+        { key: 'settings', title: 'Settings', icon: 'cog' }
+    ];
+    const renderScene = BottomNavigation.SceneMap({
+        home: () => <Home />,
+        daysoff: () => <Daysoff />,
+        settings: () => <Settings />
+    });
     return (
         authData ? (
-            <NavigationContainer>
-                <Tab.Navigator initialRouteName="Home">
-                    <Tab.Screen
-                        name="Home"
-                        component={Home}
-                        options={{
-                            // eslint-disable-next-line react/prop-types
-                            tabBarIcon: ({ color, size }) => (
-                                <FontAwesome name="home" size={size} color={color} />
-                            )
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Daysoff"
-                        component={Daysoff}
-                        options={{
-                            // eslint-disable-next-line react/prop-types
-                            tabBarIcon: ({ color, size }) => (
-                                <FontAwesome name="calendar" size={size} color={color} />
-                            )
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Settings"
-                        component={Settings}
-                        options={{
-                            // eslint-disable-next-line react/prop-types
-                            tabBarIcon: ({ color, size }) => (
-                                <FontAwesome name="cog" size={size} color={color} />
-                            )
-                        }}
-                    />
-                </Tab.Navigator>
-            </NavigationContainer>
+            <BottomNavigation
+                navigationState={{ index, routes }}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+            />
         ) : (
             <Login />
         )

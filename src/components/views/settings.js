@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import Page from '../organisms/page.js';
+
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -11,8 +13,8 @@ const styles = StyleSheet.create({
 
 export default function Settings() {
     return (
-        <View style={styles.container}>
+        <Page>
             <Text>settings</Text>
-        </View>
+        </Page>
     );
 }

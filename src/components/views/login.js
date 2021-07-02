@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
+import { TextInput, Button, Text } from 'react-native-paper';
 
-import Button from '../atoms/button.js';
-import Input from '../atoms/input.js';
-import { useAuth } from '../../helpers/auth.js';
+import FreedayLogo from '../../assets/freeday-logo.png';
+import { useAuth } from '../contexts/auth.js';
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
         flex: 1,
         justifyContent: 'center'
+    },
+    title: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: 10
+    },
+    titleLogo: {
+        width: 50,
+        height: 50
+    },
+    titleText: {
+        fontSize: 35,
+        marginLeft: 10
+    },
+    input: {
+        margin: 10
+    },
+    button: {
+        margin: 10
     }
 });
 
@@ -19,23 +39,33 @@ export default function Login() {
     const { login } = useAuth();
     return (
         <View style={styles.container}>
-            <Input
-                type="text"
+            <View style={styles.title}>
+                <Image source={FreedayLogo} style={styles.titleLogo} />
+                <Text style={styles.titleText}>Freeday</Text>
+            </View>
+            <TextInput
+                label="Username"
                 value={username}
-                onChange={(text) => setUsername(text)}
+                onChangeText={(text) => setUsername(text)}
+                style={styles.input}
             />
-            <Input
-                type="password"
+            <TextInput
+                label="Password"
                 value={password}
-                onChange={(text) => setPassword(text)}
+                onChangeText={(text) => setPassword(text)}
+                secureTextEntry
+                style={styles.input}
             />
             <Button
-                text="Login"
-                accessibility="Submit login form"
+                icon="login"
+                mode="contained"
                 onPress={() => {
                     login('beta', username, password);
                 }}
-            />
+                style={styles.button}
+            >
+                Login
+            </Button>
         </View>
     );
 }

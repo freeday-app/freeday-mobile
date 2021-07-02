@@ -5,10 +5,9 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import Toast from 'react-native-root-toast';
 import PropTypes from 'prop-types';
 import DayJS from 'dayjs';
+import { Snackbar, Avatar } from 'react-native-paper';
 
 import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
@@ -80,12 +79,10 @@ function DayoffItem({
     return (
         <TouchableOpacity style={styles.dayoffItem} onPress={() => onPress(id)}>
             <View style={styles.dayoffItemUser}>
-                <Avatar
+                <Avatar.Image
                     containerStyle={styles.dayoffItemUserAvatar}
-                    rounded
-                    source={{
-                        uri: avatar
-                    }}
+                    size={24}
+                    source={{ uri: avatar }}
                 />
                 <Text style={styles.dayoffItemUserName}>{username}</Text>
             </View>
@@ -120,6 +117,10 @@ DayoffItem.defaultProps = {
 
 export default function Daysoff() {
     const [daysoff, setDaysoff] = useState([]);
+    const [snackbar, setSnackbar] = useState({
+        isVisible: false,
+        text: null
+    });
     useEffect(() => {
         (async () => {
             try {
@@ -129,15 +130,18 @@ export default function Daysoff() {
                 });
                 setDaysoff(resultDaysoff);
             } catch (err) {
-                Toast.show('Error while getting daysoff', {
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.TOP
+                setSnackbar({
+                    isVisible: true,
+                    text: 'Authentication failed :('
                 });
             }
         })();
     }, []);
     return (
         <Page filter onFilter={() => {}}>
+            <Snackbar visible={snackbar.isVisible}>
+                {snackbar.text}
+            </Snackbar>
             <DayoffList>
                 {
                     daysoff.map((dayoff) => (
