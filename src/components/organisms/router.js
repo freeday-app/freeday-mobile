@@ -2,10 +2,10 @@ import React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 
 import { useAuth } from '../contexts/auth.js';
-import Login from '../views/login.js';
-import Home from '../views/home.js';
-import Daysoff from '../views/daysoff.js';
-import Settings from '../views/settings.js';
+import Login from '../pages/login.js';
+import Home from '../pages/home.js';
+import Daysoff from '../pages/daysoff.js';
+import Settings from '../pages/settings.js';
 
 export default function Router() {
     const { authData } = useAuth();
