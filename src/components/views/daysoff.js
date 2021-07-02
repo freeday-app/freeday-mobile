@@ -7,8 +7,9 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import DayJS from 'dayjs';
-import { Snackbar, Avatar } from 'react-native-paper';
+import { Avatar } from 'react-native-paper';
 
+import { useToast } from '../contexts/toast.js';
 import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
 
@@ -117,10 +118,7 @@ DayoffItem.defaultProps = {
 
 export default function Daysoff() {
     const [daysoff, setDaysoff] = useState([]);
-    const [snackbar, setSnackbar] = useState({
-        isVisible: false,
-        text: null
-    });
+    const { showToast } = useToast();
     useEffect(() => {
         (async () => {
             try {
@@ -130,18 +128,12 @@ export default function Daysoff() {
                 });
                 setDaysoff(resultDaysoff);
             } catch (err) {
-                setSnackbar({
-                    isVisible: true,
-                    text: 'Authentication failed :('
-                });
+                showToast('Error while getting daysoff');
             }
         })();
     }, []);
     return (
         <Page filter onFilter={() => {}}>
-            <Snackbar visible={snackbar.isVisible}>
-                {snackbar.text}
-            </Snackbar>
             <DayoffList>
                 {
                     daysoff.map((dayoff) => (
@@ -153,7 +145,7 @@ export default function Daysoff() {
                             type={dayoff.type.name}
                             start={dayoff.start}
                             end={dayoff.end}
-                            onPress={(dayoffId) => {
+                            onPress={(/* dayoffId */) => {
                                 //
                             }}
                         />

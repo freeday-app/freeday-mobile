@@ -2,22 +2,19 @@ import React, { createContext, useState, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import PropTypes from 'prop-types';
 
-import useToast from '../hooks/toast.js';
+import { useToast } from './toast.js';
 import API from '../../helpers/api.js';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [authData, setAuthData] = useState(null);
-    const { Toast, setToast } = useToast();
+    const { showToast } = useToast();
     const logout = async () => {
         await SecureStore.deleteItemAsync('tenant');
         await SecureStore.deleteItemAsync('token');
         setAuthData(null);
-        setToast({
-            visible: true,
-            text: 'Authentication failed :('
-        });
+        showToast('Authentication failed');
     };
     const login = async (tenant, username, password) => {
         try {
@@ -61,7 +58,6 @@ export function AuthProvider({ children }) {
                 check
             }}
         >
-            <Toast />
             {children}
         </AuthContext.Provider>
     );

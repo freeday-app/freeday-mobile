@@ -2,10 +2,13 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    Image
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { Appbar } from 'react-native-paper';
+import { Appbar, Text } from 'react-native-paper';
+
+import FreedayLogo from '../../assets/freeday-logo.png';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,6 +22,21 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'flex-start',
         paddingBottom: 25
+    },
+    headerTitle: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: 10
+    },
+    headerTitleLogo: {
+        width: 25,
+        height: 25
+    },
+    headerTitleText: {
+        fontSize: 20,
+        marginLeft: 10
     }
 });
 
@@ -26,7 +44,14 @@ export default function Page({ children, filter, onFilter }) {
     return (
         <View style={styles.container}>
             <Appbar.Header>
-                <Appbar.Content title="Freeday" />
+                <Appbar.Content
+                    title={(
+                        <View style={styles.headerTitle}>
+                            <Image source={FreedayLogo} style={styles.headerTitleLogo} />
+                            <Text style={styles.headerTitleText}>Freeday</Text>
+                        </View>
+                    )}
+                />
                 {filter ? (
                     <Appbar.Action icon="filter" onPress={onFilter} />
                 ) : null}

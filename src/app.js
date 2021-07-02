@@ -1,14 +1,17 @@
 import React from 'react';
 import { registerRootComponent } from 'expo';
 
+import { ToastProvider } from './components/contexts/toast.js';
 import { AuthProvider } from './components/contexts/auth.js';
 import Router from './components/organisms/router.js';
 
 function App() {
     return (
-        <AuthProvider>
-            <Router />
-        </AuthProvider>
+        <ToastProvider>
+            <AuthProvider>
+                <Router />
+            </AuthProvider>
+        </ToastProvider>
     );
 }
 
