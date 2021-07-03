@@ -12,7 +12,7 @@ export function ToastProvider({ children }) {
         setVisible(true);
     };
     return (
-        <ToastContext.Provider value={{ visible, text, showToast }}>
+        <ToastContext.Provider value={{ showToast }}>
             <Snackbar
                 visible={visible}
                 duration={2000}

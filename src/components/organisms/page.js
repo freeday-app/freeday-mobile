@@ -11,8 +11,11 @@ import {
     ActivityIndicator
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
+import 'intl';
+import 'intl/locale-data/jsonp/en.js';
 
 import FreedayLogo from '../../assets/freeday-logo.png';
+import { useFilter } from '../contexts/filter.js';
 
 const styles = StyleSheet.create({
     container: {
@@ -51,9 +54,9 @@ export default function Page({
     children,
     scroll,
     filter,
-    onFilter,
     loading
 }) {
+    const { showFilter } = useFilter();
     let content = null;
     if (loading) {
         content = (
@@ -86,7 +89,12 @@ export default function Page({
                     )}
                 />
                 {filter ? (
-                    <Appbar.Action icon="filter" onPress={onFilter} />
+                    <>
+                        <Appbar.Action
+                            icon="filter"
+                            onPress={() => showFilter()}
+                        />
+                    </>
                 ) : null}
             </Appbar.Header>
             {content}
@@ -101,13 +109,11 @@ Page.propTypes = {
         PropTypes.element
     ]).isRequired,
     scroll: PropTypes.bool,
-    filter: PropTypes.bool,
-    onFilter: PropTypes.func
+    filter: PropTypes.bool
 };
 
 Page.defaultProps = {
     loading: false,
     scroll: false,
-    filter: false,
-    onFilter: () => {}
+    filter: false
 };
