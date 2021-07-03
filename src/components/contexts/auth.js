@@ -36,7 +36,6 @@ export function AuthProvider({ children }) {
                 token
             });
         } catch (err) {
-            console.log(err);
             await logout();
         }
     };

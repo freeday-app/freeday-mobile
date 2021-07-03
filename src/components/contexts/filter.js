@@ -6,10 +6,12 @@ import PropTypes from 'prop-types';
 import DayJS from 'dayjs';
 
 import Form from '../molecules/form.js';
+import Select from '../atoms/select.js';
 
 const styles = StyleSheet.create({
     modal: {
-        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         padding: 25,
         width: '100%'
     },
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        flexGrow: 1,
         justifyContent: 'center',
         padding: 25,
         width: '100%'
@@ -39,6 +41,7 @@ export function FilterProvider({ children }) {
     });
     const [filterVisible, setFilterVisible] = useState(false);
     const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const [types, setTypes] = useState([]);
     const showFilter = () => {
         setFilterVisible(true);
     };
@@ -95,7 +98,20 @@ export function FilterProvider({ children }) {
                             <Form.Group>
                                 <Form.Label text="Types" />
                                 <Form.Input>
-                                    {/*  */}
+                                    <Select
+                                        multiple
+                                        items={[{
+                                            id: 1,
+                                            name: 'Holiday'
+                                        }, {
+                                            id: 2,
+                                            name: 'Sick'
+                                        }]}
+                                        selectedItems={types}
+                                        onSelect={(items) => {
+                                            setTypes(items);
+                                        }}
+                                    />
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
