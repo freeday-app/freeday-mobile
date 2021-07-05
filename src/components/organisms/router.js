@@ -2,6 +2,7 @@ import React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 
 import { useAuth } from '../contexts/auth.js';
+import { FilterProvider } from '../contexts/filter.js';
 import Login from '../pages/login.js';
 import Home from '../pages/home.js';
 import Daysoff from '../pages/daysoff.js';
@@ -22,11 +23,13 @@ export default function Router() {
     });
     return (
         authData ? (
-            <BottomNavigation
-                navigationState={{ index, routes }}
-                onIndexChange={setIndex}
-                renderScene={renderScene}
-            />
+            <FilterProvider>
+                <BottomNavigation
+                    navigationState={{ index, routes }}
+                    onIndexChange={setIndex}
+                    renderScene={renderScene}
+                />
+            </FilterProvider>
         ) : (
             <Login />
         )

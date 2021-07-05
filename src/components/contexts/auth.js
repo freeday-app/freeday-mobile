@@ -1,4 +1,9 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect
+} from 'react';
 import * as SecureStore from 'expo-secure-store';
 import PropTypes from 'prop-types';
 
@@ -8,13 +13,14 @@ import API from '../../helpers/api.js';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+    const [loading, setLoading] = useState(true);
     const [authData, setAuthData] = useState(null);
     const { showToast } = useToast();
     const logout = async () => {
         await SecureStore.deleteItemAsync('tenant');
         await SecureStore.deleteItemAsync('token');
         setAuthData(null);
-        showToast('Authentication failed');
+        setLoading(false);
     };
     const login = async (tenant, username, password) => {
         try {
@@ -37,25 +43,38 @@ export function AuthProvider({ children }) {
             });
         } catch (err) {
             await logout();
+            showToast('Authentication failed');
         }
     };
-    const check = async () => {
+    const initAuth = async () => {
         try {
-            await API.call({
+            const tenant = await SecureStore.getItemAsync('tenant');
+            const token = await SecureStore.getItemAsync('token');
+            API.tenant = tenant;
+            API.token = token;
+            const auth = await API.call({
                 method: 'GET',
                 route: '/api/auth'
+            });
+            setLoading(false);
+            setAuthData({
+                userId: auth.userId,
+                token: auth.token
             });
         } catch (err) {
             await logout();
         }
     };
+    useEffect(() => {
+        initAuth();
+    }, []);
     return (
         <AuthContext.Provider
             value={{
+                loading,
                 authData,
                 login,
-                logout,
-                check
+                logout
             }}
         >
             {children}

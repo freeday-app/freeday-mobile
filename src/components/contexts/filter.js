@@ -1,12 +1,19 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, {
+    createContext,
+    useState,
+    useContext,
+    useEffect
+} from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, Portal, Modal } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
 import PropTypes from 'prop-types';
 import DayJS from 'dayjs';
 
+import { useToast } from './toast.js';
 import Form from '../molecules/form.js';
 import Select from '../atoms/select.js';
+import API from '../../helpers/api.js';
 
 const styles = StyleSheet.create({
     modal: {
@@ -26,7 +33,11 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     scrollContainer: {
-        height: '100%',
+        flexGrow: 1,
+        width: '100%'
+    },
+    submitButton: {
+        marginTop: 10,
         width: '100%'
     }
 });
@@ -34,17 +45,62 @@ const styles = StyleSheet.create({
 const FilterContext = createContext();
 
 export function FilterProvider({ children }) {
+    const { showToast } = useToast();
+    const [filterMetaData, setFilterMetaData] = useState({
+        dayoffTypes: [],
+        slackUsers: [],
+        status: [{
+            id: 'confirmed',
+            name: 'Confirmed',
+            icon: 'check'
+        }, {
+            id: 'canceled',
+            name: 'Canceled',
+            icon: 'window-close'
+        }]
+    });
     const [filterData, setFilterData] = useState({
         start: DayJS().startOf('month').toDate(),
         end: DayJS().endOf('month').toDate(),
-        types: []
+        dayoffTypes: [],
+        slackUsers: [],
+        status: []
     });
     const [filterVisible, setFilterVisible] = useState(false);
     const [datePickerVisible, setDatePickerVisible] = useState(false);
-    const [types, setTypes] = useState([]);
     const showFilter = () => {
         setFilterVisible(true);
     };
+    const getFilterMetaData = async () => {
+        try {
+            const { dayoffTypes } = await API.call({
+                method: 'GET',
+                route: '/api/daysoff/types'
+            });
+            const { slackUsers } = await API.call({
+                method: 'GET',
+                route: '/api/slack/users'
+            });
+            setFilterMetaData({
+                ...filterMetaData,
+                dayoffTypes: dayoffTypes.map(({ id, name, emoji }) => ({
+                    id,
+                    name,
+                    emoji
+                })),
+                slackUsers: slackUsers.map(({ slackId, name, avatar }) => ({
+                    id: slackId,
+                    name,
+                    image: avatar
+                }))
+            });
+        } catch (err) {
+            showToast('Error while getting dayoff types');
+        }
+    };
+    useEffect(() => {
+        getFilterMetaData();
+    }, []);
     return (
         <FilterContext.Provider value={{ filterData, showFilter }}>
             <Portal>
@@ -100,31 +156,58 @@ export function FilterProvider({ children }) {
                                 <Form.Input>
                                     <Select
                                         multiple
-                                        items={[{
-                                            id: 1,
-                                            name: 'Holiday'
-                                        }, {
-                                            id: 2,
-                                            name: 'Sick'
-                                        }]}
-                                        selectedItems={types}
-                                        onSelect={(items) => {
-                                            setTypes(items);
+                                        items={filterMetaData.dayoffTypes}
+                                        selectedItems={filterData.dayoffTypes}
+                                        onSelect={(dayoffTypes) => {
+                                            setFilterData({
+                                                ...filterData,
+                                                dayoffTypes
+                                            });
                                         }}
                                     />
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Button
-                                    icon="check"
-                                    mode="contained"
-                                    onPress={() => setDatePickerVisible(true)}
-                                >
-                                    Open
-                                </Button>
+                                <Form.Label text="Slack users" />
+                                <Form.Input>
+                                    <Select
+                                        multiple
+                                        items={filterMetaData.slackUsers}
+                                        selectedItems={filterData.slackUsers}
+                                        onSelect={(slackUsers) => {
+                                            setFilterData({
+                                                ...filterData,
+                                                slackUsers
+                                            });
+                                        }}
+                                    />
+                                </Form.Input>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label text="Status" />
+                                <Form.Input>
+                                    <Select
+                                        items={filterMetaData.status}
+                                        selectedItems={filterData.status}
+                                        onSelect={(status) => {
+                                            setFilterData({
+                                                ...filterData,
+                                                status
+                                            });
+                                        }}
+                                    />
+                                </Form.Input>
                             </Form.Group>
                         </Form.Container>
                     </ScrollView>
+                    <Button
+                        icon="check"
+                        mode="contained"
+                        onPress={() => setFilterVisible(false)}
+                        style={styles.submitButton}
+                    >
+                        Submit
+                    </Button>
                 </Modal>
             </Portal>
             {children}

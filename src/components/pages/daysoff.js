@@ -16,6 +16,7 @@ import {
 import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
+import { useFilter } from '../contexts/filter.js';
 import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
 
@@ -69,11 +70,34 @@ export default function Daysoff() {
     const [menu, setMenu] = useState(defaultMenu);
     const hideMenu = () => setMenu(defaultMenu);
     const { showToast } = useToast();
+    const { filterData } = useFilter();
     const getDaysoff = async () => {
         try {
+            const urlArgs = {
+                page: 'all',
+                order: 'asc'
+            };
+            if (filterData.start) {
+                urlArgs.start = DayJS(filterData.start).format('YYYY-MM-DD');
+            }
+            if (filterData.end) {
+                urlArgs.end = DayJS(filterData.end).format('YYYY-MM-DD');
+            }
+            if (filterData.dayoffTypes.length > 0) {
+                urlArgs.type = filterData.dayoffTypes.map((d) => d.id).join(',');
+            }
+            if (filterData.slackUsers.length > 0) {
+                urlArgs.slackUser = filterData.slackUsers.map((s) => s.id).join(',');
+            }
+            if (filterData.status.length > 0) {
+                urlArgs.status = filterData.status[0].id;
+            }
+            const urlArgString = Object.keys(urlArgs).map((key) => (
+                `${key}=${urlArgs[key]}`
+            )).join('&');
             const { daysoff: resultDaysoff } = await API.call({
                 method: 'GET',
-                route: '/api/daysoff'
+                route: `/api/daysoff?${urlArgString}`
             });
             setDaysoff(resultDaysoff);
             setLoadingDayoffId(null);
@@ -96,9 +120,9 @@ export default function Daysoff() {
     };
     useEffect(() => {
         getDaysoff();
-    }, []);
+    }, [filterData]);
     return (
-        <Page loading={loading} filter onFilter={() => {}}>
+        <Page loading={loading} filter>
             <DataTable>
                 <DataTable.Header>
                     <DataTable.Title style={{ flex: 3 }}>User</DataTable.Title>
@@ -188,6 +212,7 @@ export default function Daysoff() {
             >
                 <Menu.Item
                     title="Confirm"
+                    icon="check"
                     onPress={() => {
                         hideMenu();
                         dayoffAction(menu.dayoffId, 'confirm');
@@ -195,6 +220,7 @@ export default function Daysoff() {
                 />
                 <Menu.Item
                     title="Cancel"
+                    icon="close"
                     onPress={() => {
                         hideMenu();
                         dayoffAction(menu.dayoffId, 'cancel');
@@ -202,6 +228,7 @@ export default function Daysoff() {
                 />
                 <Menu.Item
                     title="Reset"
+                    icon="minus"
                     onPress={() => {
                         hideMenu();
                         dayoffAction(menu.dayoffId, 'reset');

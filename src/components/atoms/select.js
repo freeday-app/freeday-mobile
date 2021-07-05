@@ -10,6 +10,7 @@ import {
     List
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
+import Emoji from 'react-native-emoji';
 
 const styles = StyleSheet.create({
     container: {
@@ -34,6 +35,9 @@ const styles = StyleSheet.create({
         padding: 25,
         width: '100%'
     },
+    modalScroll: {
+        flexGrow: 1
+    },
     selectedItems: {
         display: 'flex',
         flexDirection: 'row',
@@ -44,6 +48,9 @@ const styles = StyleSheet.create({
     selectedItem: {
         marginHorizontal: 5,
         marginVertical: 2
+    },
+    submitButton: {
+        marginTop: 10
     }
 });
 
@@ -95,9 +102,39 @@ export default function Select({
             onSelect([itemsObj[id]]);
         }
     };
+    const clear = () => {
+        setOpen(false);
+        onSelect([]);
+    };
     const deleteItem = (id) => {
         delete selectedItemsObj[id];
+        setMultipleSelectedItemsObj(selectedItemsObj);
         onSelect(Object.values(selectedItemsObj));
+    };
+    const getListItemLeft = (item, leftProps) => {
+        if (item.image) {
+            return (
+                <Avatar.Image
+                    {...leftProps}
+                    size={24}
+                    source={{ uri: item.image }}
+                />
+            );
+        }
+        if (item.icon) {
+            return (
+                <List.Icon
+                    {...leftProps}
+                    icon={item.icon}
+                />
+            );
+        }
+        if (item.emoji) {
+            return (
+                <Emoji name={item.emoji} />
+            );
+        }
+        return null;
     };
     return (
         <View style={styles.container}>
@@ -126,9 +163,7 @@ export default function Select({
                             <Chip
                                 key={item.id}
                                 onClose={() => deleteItem(item.id)}
-                                avatar={item.image ? ({
-                                    uri: item.image
-                                }) : null}
+                                avatar={<>{getListItemLeft(item, {})}</>}
                                 mode="outlined"
                                 style={styles.selectedItem}
                             >
@@ -150,22 +185,14 @@ export default function Select({
                     style={styles.modal}
                     contentContainerStyle={styles.modalContent}
                 >
-                    <ScrollView style={{ flexGrow: 1 }}>
+                    <ScrollView style={styles.modalScroll}>
                         <List.Section>
                             {
                                 items.map((item) => (
                                     <List.Item
                                         key={item.id}
                                         title={item.name}
-                                        left={(props) => (
-                                            item.image ? (
-                                                <Avatar.Image
-                                                    {...props}
-                                                    size={24}
-                                                    source={{ uri: item.image }}
-                                                />
-                                            ) : null
-                                        )}
+                                        left={(props) => getListItemLeft(item, props)}
                                         right={(props) => (
                                             multiple && multipleSelectedItemsObj[item.id] ? (
                                                 <List.Icon {...props} icon="check" />
@@ -183,6 +210,7 @@ export default function Select({
                         multiple ? (
                             <Button
                                 mode="contained"
+                                style={styles.submitButton}
                                 onPress={() => {
                                     setOpen(false);
                                     onSelect(
@@ -192,7 +220,15 @@ export default function Select({
                             >
                                 Submit
                             </Button>
-                        ) : null
+                        ) : (
+                            <Button
+                                mode="outlined"
+                                style={styles.submitButton}
+                                onPress={() => clear()}
+                            >
+                                Clear
+                            </Button>
+                        )
                     }
                 </Modal>
             </Portal>
@@ -206,7 +242,9 @@ const itemType = PropTypes.exact({
         PropTypes.number
     ]),
     name: PropTypes.string,
-    image: PropTypes.string
+    image: PropTypes.string,
+    icon: PropTypes.string,
+    emoji: PropTypes.string
 });
 
 Select.propTypes = {
