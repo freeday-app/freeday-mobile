@@ -12,14 +12,19 @@ import {
 import PropTypes from 'prop-types';
 import Emoji from 'react-native-emoji';
 
+import { useLanguage } from '../contexts/language.js';
+import { useTheme } from '../contexts/theme.js';
 import styles from './select.style.js';
 
 export default function Select({
     multiple,
     items,
     selectedItems,
-    onSelect
+    onSelect,
+    clearButton
 }) {
+    const { getText } = useLanguage();
+    const { themeData } = useTheme();
     const [open, setOpen] = useState(false);
     const itemsObj = Object.fromEntries(
         items.map((item) => [item.id, item])
@@ -35,16 +40,12 @@ export default function Select({
     );
     const getSelectLabel = () => {
         if (multiple) {
-            return `Select items ${
-                selectedItems.length > 0
-                    ? `(${selectedItems.length} selected)`
-                    : ''
-            }`;
+            return getText('button.selectItems');
         }
         return (
             selectedItems.length > 0
                 ? selectedItems[0].name
-                : 'Select item'
+                : getText('button.selectItem')
         );
     };
     const selectItem = (id) => {
@@ -96,6 +97,36 @@ export default function Select({
         }
         return null;
     };
+    const getButtons = () => {
+        if (multiple) {
+            return (
+                <Button
+                    mode="contained"
+                    style={styles.submitButton}
+                    onPress={() => {
+                        setOpen(false);
+                        onSelect(
+                            Object.values(multipleSelectedItemsObj)
+                        );
+                    }}
+                >
+                    {getText('button.submit')}
+                </Button>
+            );
+        }
+        if (clearButton) {
+            return (
+                <Button
+                    mode="contained"
+                    style={styles.submitButton}
+                    onPress={() => clear()}
+                >
+                    {getText('button.clear')}
+                </Button>
+            );
+        }
+        return null;
+    };
     return (
         <View style={styles.container}>
             <Button
@@ -143,7 +174,10 @@ export default function Select({
                         setOpen(false);
                     }}
                     style={styles.modal}
-                    contentContainerStyle={styles.modalContent}
+                    contentContainerStyle={{
+                        ...styles.modalContent,
+                        backgroundColor: themeData.colors.background
+                    }}
                 >
                     <ScrollView style={styles.modalScroll}>
                         <List.Section>
@@ -166,30 +200,7 @@ export default function Select({
                             }
                         </List.Section>
                     </ScrollView>
-                    {
-                        multiple ? (
-                            <Button
-                                mode="contained"
-                                style={styles.submitButton}
-                                onPress={() => {
-                                    setOpen(false);
-                                    onSelect(
-                                        Object.values(multipleSelectedItemsObj)
-                                    );
-                                }}
-                            >
-                                Submit
-                            </Button>
-                        ) : (
-                            <Button
-                                mode="outlined"
-                                style={styles.submitButton}
-                                onPress={() => clear()}
-                            >
-                                Clear
-                            </Button>
-                        )
-                    }
+                    {getButtons()}
                 </Modal>
             </Portal>
         </View>
@@ -211,9 +222,11 @@ Select.propTypes = {
     items: PropTypes.arrayOf(itemType).isRequired,
     selectedItems: PropTypes.arrayOf(itemType).isRequired,
     onSelect: PropTypes.func.isRequired,
-    multiple: PropTypes.bool
+    multiple: PropTypes.bool,
+    clearButton: PropTypes.bool
 };
 
 Select.defaultProps = {
-    multiple: false
+    multiple: false,
+    clearButton: false
 };

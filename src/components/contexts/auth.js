@@ -7,6 +7,7 @@ import React, {
 import * as SecureStore from 'expo-secure-store';
 
 import { useToast } from './toast.js';
+import { useLanguage } from './language.js';
 import API from '../../helpers/api.js';
 import Types from '../../helpers/types.js';
 
@@ -16,6 +17,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [authData, setAuthData] = useState(null);
     const { showToast } = useToast();
+    const { getText } = useLanguage();
     const logout = async () => {
         await SecureStore.deleteItemAsync('tenant');
         await SecureStore.deleteItemAsync('token');
@@ -43,7 +45,7 @@ export function AuthProvider({ children }) {
             });
         } catch (err) {
             await logout();
-            showToast('Authentication failed');
+            showToast(getText('auth.error.login'));
         }
     };
     const initAuth = async () => {

@@ -16,6 +16,7 @@ import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
 import { useFilter } from '../contexts/filter.js';
+import { useLanguage } from '../contexts/language.js';
 import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
 
@@ -35,6 +36,7 @@ export default function Daysoff() {
     const hideMenu = () => setMenu(defaultMenu);
     const { showToast } = useToast();
     const { filterData } = useFilter();
+    const { getText } = useLanguage();
     const getDaysoff = async () => {
         try {
             const urlArgs = {
@@ -67,7 +69,7 @@ export default function Daysoff() {
             setLoadingDayoffId(null);
             setLoading(false);
         } catch (err) {
-            showToast('Error while getting daysoff');
+            showToast(getText('daysoff.error.getData'));
         }
     };
     const dayoffAction = async (dayoffId, action) => {
@@ -79,7 +81,7 @@ export default function Daysoff() {
             });
             await getDaysoff();
         } catch (err) {
-            showToast('Error while taking action on dayoff');
+            showToast(getText('daysoff.error.action'));
         }
     };
     useEffect(() => {
@@ -89,10 +91,18 @@ export default function Daysoff() {
         <Page header filter loading={loading}>
             <DataTable>
                 <DataTable.Header>
-                    <DataTable.Title style={{ flex: 3 }}>User</DataTable.Title>
-                    <DataTable.Title style={{ flex: 2 }}>Date</DataTable.Title>
-                    <DataTable.Title style={{ flex: 2 }}>Type</DataTable.Title>
-                    <DataTable.Title style={{ flex: 1 }}>Status</DataTable.Title>
+                    <DataTable.Title style={{ flex: 3 }}>
+                        {getText('daysoff.column.user')}
+                    </DataTable.Title>
+                    <DataTable.Title style={{ flex: 2 }}>
+                        {getText('daysoff.column.date')}
+                    </DataTable.Title>
+                    <DataTable.Title style={{ flex: 2 }}>
+                        {getText('daysoff.column.type')}
+                    </DataTable.Title>
+                    <DataTable.Title style={{ flex: 1 }}>
+                        {getText('daysoff.column.status')}
+                    </DataTable.Title>
                 </DataTable.Header>
                 <ScrollView>
                     {daysoff.map(({
@@ -116,15 +126,27 @@ export default function Daysoff() {
                             );
                         } else if (canceled) {
                             status = (
-                                <IconButton icon="close" size={25} color={Colors.red500} />
+                                <IconButton
+                                    icon="close"
+                                    size={25}
+                                    color={Colors.red500}
+                                />
                             );
                         } else if (confirmed) {
                             status = (
-                                <IconButton icon="check" size={25} color={Colors.green500} />
+                                <IconButton
+                                    icon="check"
+                                    size={25}
+                                    color={Colors.green500}
+                                />
                             );
                         } else {
                             status = (
-                                <IconButton icon="minus" size={25} color={Colors.grey500} />
+                                <IconButton
+                                    icon="minus"
+                                    size={25}
+                                    color={Colors.grey500}
+                                />
                             );
                         }
                         return (
@@ -151,8 +173,12 @@ export default function Daysoff() {
                                 </DataTable.Cell>
                                 <DataTable.Cell style={{ flex: 2 }}>
                                     <View>
-                                        <Text>{DayJS(start).format('YYYY-MM-DD')}</Text>
-                                        <Text>{DayJS(end).format('YYYY-MM-DD')}</Text>
+                                        <Text>
+                                            {DayJS(start).format(getText('date.format'))}
+                                        </Text>
+                                        <Text>
+                                            {DayJS(end).format(getText('date.format'))}
+                                        </Text>
                                     </View>
                                 </DataTable.Cell>
                                 <DataTable.Cell style={{ flex: 2 }}>
@@ -175,7 +201,7 @@ export default function Daysoff() {
                 }}
             >
                 <Menu.Item
-                    title="Confirm"
+                    title={getText('daysoff.action.confirm')}
                     icon="check"
                     onPress={() => {
                         hideMenu();
@@ -183,7 +209,7 @@ export default function Daysoff() {
                     }}
                 />
                 <Menu.Item
-                    title="Cancel"
+                    title={getText('daysoff.action.cancel')}
                     icon="close"
                     onPress={() => {
                         hideMenu();
@@ -191,7 +217,7 @@ export default function Daysoff() {
                     }}
                 />
                 <Menu.Item
-                    title="Reset"
+                    title={getText('daysoff.action.reset')}
                     icon="minus"
                     onPress={() => {
                         hideMenu();

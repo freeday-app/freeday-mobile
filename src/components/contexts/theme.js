@@ -69,11 +69,15 @@ export function ThemeProvider({ children }) {
         getStoredTheme();
     }, []);
     useEffect(() => {
+        if (!themes[theme]) {
+            throw new Error(`Invalid theme ${theme}`);
+        }
         storeTheme();
     }, [theme]);
+    const themeData = getTheme(theme);
     return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
-            <PaperProvider theme={getTheme(theme)}>
+        <ThemeContext.Provider value={{ theme, setTheme, themeData }}>
+            <PaperProvider theme={themeData}>
                 {children}
             </PaperProvider>
         </ThemeContext.Provider>

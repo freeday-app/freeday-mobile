@@ -9,7 +9,6 @@ export default StyleSheet.create({
     },
     modalContent: {
         alignItems: 'center',
-        backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,

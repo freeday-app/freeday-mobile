@@ -11,8 +11,10 @@ import {
     withTheme
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
+
 import 'intl';
 import 'intl/locale-data/jsonp/en.js';
+import 'intl/locale-data/jsonp/fr.js';
 
 import FreedayLogo from '../../assets/freeday-logo.png';
 import FreedayLogoDark from '../../assets/freeday-logo-dark.png';

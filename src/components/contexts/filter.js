@@ -5,11 +5,17 @@ import React, {
     useEffect
 } from 'react';
 import { ScrollView } from 'react-native';
-import { Button, Portal, Modal } from 'react-native-paper';
+import {
+    Button,
+    Portal,
+    Modal
+} from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
 import DayJS from 'dayjs';
 
 import { useToast } from './toast.js';
+import { useLanguage } from './language.js';
+import { useTheme } from './theme.js';
 import Form from '../molecules/form.js';
 import Select from '../atoms/select.js';
 import API from '../../helpers/api.js';
@@ -21,16 +27,18 @@ const FilterContext = createContext();
 
 export function FilterProvider({ children }) {
     const { showToast } = useToast();
+    const { language, getText } = useLanguage();
+    const { themeData } = useTheme();
     const [filterMetaData, setFilterMetaData] = useState({
         dayoffTypes: [],
         slackUsers: [],
         status: [{
             id: 'confirmed',
-            name: 'Confirmed',
+            name: getText('daysoff.status.confirmed'),
             icon: 'check'
         }, {
             id: 'canceled',
-            name: 'Canceled',
+            name: getText('daysoff.status.canceled'),
             icon: 'window-close'
         }]
     });
@@ -70,7 +78,7 @@ export function FilterProvider({ children }) {
                 }))
             });
         } catch (err) {
-            showToast('Error while getting dayoff types');
+            showToast(getText('filter.error.getData'));
         }
     };
     useEffect(() => {
@@ -83,14 +91,17 @@ export function FilterProvider({ children }) {
                     visible={filterVisible}
                     onDismiss={() => setFilterVisible(false)}
                     style={styles.modal}
-                    contentContainerStyle={styles.modalContent}
+                    contentContainerStyle={{
+                        ...styles.modalContent,
+                        backgroundColor: themeData.colors.background
+                    }}
                 >
                     <ScrollView style={styles.scrollContainer}>
                         <DatePickerModal
-                            locale="en"
+                            locale={language}
                             mode="range"
                             saveLabel="Save"
-                            label="Select date"
+                            label={getText('button.selectPeriod')}
                             animationType="slide"
                             visible={datePickerVisible}
                             onDismiss={() => setDatePickerVisible(false)}
@@ -111,23 +122,26 @@ export function FilterProvider({ children }) {
                         />
                         <Form.Container>
                             <Form.Group>
-                                <Form.Label>Period</Form.Label>
+                                <Form.Label>
+                                    {getText('filter.field.period')}
+                                </Form.Label>
                                 <Form.Input>
                                     <Button
                                         mode="text"
                                         uppercase={false}
                                         onPress={() => setDatePickerVisible(true)}
                                     >
-                                        {`From ${
-                                            DayJS(filterData.start).format('YYYY-MM-DD')
-                                        } to ${
-                                            DayJS(filterData.end).format('YYYY-MM-DD')
-                                        }`}
+                                        {getText('date.period', [
+                                            DayJS(filterData.start).format(getText('date.format')),
+                                            DayJS(filterData.end).format(getText('date.format'))
+                                        ])}
                                     </Button>
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label>Types</Form.Label>
+                                <Form.Label>
+                                    {getText('filter.field.types')}
+                                </Form.Label>
                                 <Form.Input>
                                     <Select
                                         multiple
@@ -143,7 +157,9 @@ export function FilterProvider({ children }) {
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label>Slack users</Form.Label>
+                                <Form.Label>
+                                    {getText('filter.field.users')}
+                                </Form.Label>
                                 <Form.Input>
                                     <Select
                                         multiple
@@ -159,9 +175,12 @@ export function FilterProvider({ children }) {
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label>Status</Form.Label>
+                                <Form.Label>
+                                    {getText('filter.field.status')}
+                                </Form.Label>
                                 <Form.Input>
                                     <Select
+                                        clearButton
                                         items={filterMetaData.status}
                                         selectedItems={filterData.status}
                                         onSelect={(status) => {
@@ -181,7 +200,7 @@ export function FilterProvider({ children }) {
                         onPress={() => setFilterVisible(false)}
                         style={styles.submitButton}
                     >
-                        Submit
+                        {getText('button.submit')}
                     </Button>
                 </Modal>
             </Portal>
