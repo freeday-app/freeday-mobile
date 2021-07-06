@@ -4,43 +4,18 @@ import React, {
     useContext,
     useEffect
 } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Button, Portal, Modal } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
-import PropTypes from 'prop-types';
 import DayJS from 'dayjs';
 
 import { useToast } from './toast.js';
 import Form from '../molecules/form.js';
 import Select from '../atoms/select.js';
 import API from '../../helpers/api.js';
+import Types from '../../helpers/types.js';
 
-const styles = StyleSheet.create({
-    modal: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 25,
-        width: '100%'
-    },
-    modalContent: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        justifyContent: 'center',
-        padding: 25,
-        width: '100%'
-    },
-    scrollContainer: {
-        flexGrow: 1,
-        width: '100%'
-    },
-    submitButton: {
-        marginTop: 10,
-        width: '100%'
-    }
-});
+import styles from './filter.style.js';
 
 const FilterContext = createContext();
 
@@ -136,7 +111,7 @@ export function FilterProvider({ children }) {
                         />
                         <Form.Container>
                             <Form.Group>
-                                <Form.Label text="Period" />
+                                <Form.Label>Period</Form.Label>
                                 <Form.Input>
                                     <Button
                                         mode="text"
@@ -152,7 +127,7 @@ export function FilterProvider({ children }) {
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label text="Types" />
+                                <Form.Label>Types</Form.Label>
                                 <Form.Input>
                                     <Select
                                         multiple
@@ -168,7 +143,7 @@ export function FilterProvider({ children }) {
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label text="Slack users" />
+                                <Form.Label>Slack users</Form.Label>
                                 <Form.Input>
                                     <Select
                                         multiple
@@ -184,7 +159,7 @@ export function FilterProvider({ children }) {
                                 </Form.Input>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label text="Status" />
+                                <Form.Label>Status</Form.Label>
                                 <Form.Input>
                                     <Select
                                         items={filterMetaData.status}
@@ -216,10 +191,7 @@ export function FilterProvider({ children }) {
 }
 
 FilterProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: Types.children.isRequired
 };
 
 export function useFilter() {

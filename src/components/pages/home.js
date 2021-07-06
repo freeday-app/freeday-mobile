@@ -1,30 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text } from 'react-native-paper';
 import Emoji from 'react-native-emoji';
 
-// import { useAuth } from '../contexts/auth.js';
 import { useToast } from '../contexts/toast.js';
 import Page from '../organisms/page.js';
 import API from '../../helpers/api.js';
 
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        justifyContent: 'center'
-    },
-    welcomeText: {
-        fontSize: 30
-    },
-    welcomeEmoji: {
-        fontSize: 50
-    }
-});
+import styles from './home.style.js';
 
 export default function Home() {
-    // const { authData: { userId } } = useAuth();
     const { showToast } = useToast();
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
@@ -44,7 +29,7 @@ export default function Home() {
         getUser();
     }, []);
     return (
-        <Page loading={loading}>
+        <Page header loading={loading}>
             <View style={styles.container}>
                 <Emoji name="wave" style={styles.welcomeEmoji} />
                 <Text style={styles.welcomeText}>

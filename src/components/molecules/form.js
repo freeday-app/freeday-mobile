@@ -1,44 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
-const styles = StyleSheet.create({
-    form: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        width: '100%'
-    },
-    group: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        marginBottom: 10,
-        width: '100%'
-    },
-    groupCenter: {
-        justifyContent: 'center'
-    },
-    groupRow: {
-        justifyContent: 'center'
-    },
-    label: {
-        marginVertical: 10,
-        width: '100%'
-    },
-    labelText: {
-        fontSize: 15,
-        textAlign: 'left',
-        width: '100%'
-    },
-    input: {
-        textAlign: 'left',
-        width: '100%'
-    }
-});
+import styles from './form.style.js';
+import Types from '../../helpers/types.js';
 
 function Container({ children }) {
     return (
@@ -49,63 +15,87 @@ function Container({ children }) {
 }
 
 Container.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: Types.children.isRequired
 };
 
-function Group({ children, row, center }) {
+function Group({
+    children,
+    row,
+    center,
+    inline
+}) {
     const rowStyle = row ? styles.groupRow : {};
     const centerStyle = center ? styles.groupCenter : {};
+    const directionStyle = inline ? styles.groupInline : styles.groupBlock;
+    const childrenWithProps = React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+            return React.cloneElement(child, { inline });
+        }
+        return child;
+    });
     return (
-        <View style={{ ...styles.group, ...rowStyle, ...centerStyle }}>
-            {children}
+        <View
+            style={{
+                ...styles.group,
+                ...rowStyle,
+                ...centerStyle,
+                ...directionStyle
+            }}
+        >
+            {childrenWithProps}
         </View>
     );
 }
 
 Group.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired,
+    children: Types.children.isRequired,
     row: PropTypes.bool,
-    center: PropTypes.bool
+    center: PropTypes.bool,
+    inline: PropTypes.bool
 };
 
 Group.defaultProps = {
     row: false,
-    center: false
+    center: false,
+    inline: false
 };
 
-function Label({ text }) {
+function Label({ children, inline }) {
+    const directionStyle = inline ? styles.labelInline : styles.labelBlock;
     return (
-        <View style={styles.label}>
+        <View style={{ ...styles.label, ...directionStyle }}>
             <Text style={styles.labelText}>
-                {text}
+                {children}
             </Text>
         </View>
     );
 }
 
 Label.propTypes = {
-    text: PropTypes.string.isRequired
+    children: Types.children.isRequired,
+    inline: PropTypes.bool
 };
 
-function Input({ children }) {
+Label.defaultProps = {
+    inline: false
+};
+
+function Input({ children, inline }) {
+    const directionStyle = inline ? styles.inputInline : styles.inputBlock;
     return (
-        <View style={styles.input}>
+        <View style={{ ...styles.input, ...directionStyle }}>
             {children}
         </View>
     );
 }
 
 Input.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: Types.children.isRequired,
+    inline: PropTypes.bool
+};
+
+Input.defaultProps = {
+    inline: false
 };
 
 export default {

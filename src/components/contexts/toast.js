@@ -1,6 +1,11 @@
-import React, { createContext, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+    createContext,
+    useState,
+    useContext
+} from 'react';
 import { Snackbar } from 'react-native-paper';
+
+import Types from '../../helpers/types.js';
 
 const ToastContext = createContext();
 
@@ -26,10 +31,7 @@ export function ToastProvider({ children }) {
 }
 
 ToastProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: Types.children.isRequired
 };
 
 export function useToast() {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BottomNavigation } from 'react-native-paper';
 
 import { useAuth } from '../contexts/auth.js';
@@ -21,6 +21,9 @@ export default function Router() {
         daysoff: () => <Daysoff />,
         settings: () => <Settings />
     });
+    useEffect(() => {
+        setIndex(0);
+    }, [authData]);
     return (
         authData ? (
             <FilterProvider>

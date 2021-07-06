@@ -1,61 +1,34 @@
 import React from 'react';
 import {
     View,
-    StyleSheet,
     ScrollView,
     Image
 } from 'react-native';
 import {
     Appbar,
     Text,
-    ActivityIndicator
+    ActivityIndicator,
+    withTheme
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
 import 'intl';
 import 'intl/locale-data/jsonp/en.js';
 
 import FreedayLogo from '../../assets/freeday-logo.png';
+import FreedayLogoDark from '../../assets/freeday-logo-dark.png';
 import { useFilter } from '../contexts/filter.js';
+import Types from '../../helpers/types.js';
 
-const styles = StyleSheet.create({
-    container: {
-        paddingBottom: 210,
-        width: '100%'
-    },
-    loading: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        justifyContent: 'center'
-    },
-    content: {
-        height: '100%',
-        width: '100%'
-    },
-    headerTitle: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        margin: 10
-    },
-    headerTitleLogo: {
-        width: 25,
-        height: 25
-    },
-    headerTitleText: {
-        fontSize: 20,
-        marginLeft: 10
-    }
-});
+import styles from './page.style.js';
 
-export default function Page({
+function Page({
+    theme,
     children,
     scroll,
     filter,
     loading
 }) {
+    const { dark, colors } = theme;
     const { showFilter } = useFilter();
     let content = null;
     if (loading) {
@@ -83,8 +56,13 @@ export default function Page({
                 <Appbar.Content
                     title={(
                         <View style={styles.headerTitle}>
-                            <Image source={FreedayLogo} style={styles.headerTitleLogo} />
-                            <Text style={styles.headerTitleText}>Freeday</Text>
+                            <Image
+                                source={dark ? FreedayLogoDark : FreedayLogo}
+                                style={styles.headerTitleLogo}
+                            />
+                            <Text style={styles.headerTitleText}>
+                                Freeday
+                            </Text>
                         </View>
                     )}
                 />
@@ -93,6 +71,7 @@ export default function Page({
                         <Appbar.Action
                             icon="filter"
                             onPress={() => showFilter()}
+                            color={colors.text}
                         />
                     </>
                 ) : null}
@@ -103,11 +82,9 @@ export default function Page({
 }
 
 Page.propTypes = {
+    theme: Types.theme.isRequired,
     loading: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired,
+    children: Types.children.isRequired,
     scroll: PropTypes.bool,
     filter: PropTypes.bool
 };
@@ -117,3 +94,5 @@ Page.defaultProps = {
     scroll: false,
     filter: false
 };
+
+export default withTheme(Page);

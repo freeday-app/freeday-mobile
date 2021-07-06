@@ -5,10 +5,10 @@ import React, {
     useEffect
 } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import PropTypes from 'prop-types';
 
 import { useToast } from './toast.js';
 import API from '../../helpers/api.js';
+import Types from '../../helpers/types.js';
 
 const AuthContext = createContext();
 
@@ -83,10 +83,7 @@ export function AuthProvider({ children }) {
 }
 
 AuthProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: Types.children.isRequired
 };
 
 export function useAuth() {
