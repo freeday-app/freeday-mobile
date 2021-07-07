@@ -3,16 +3,16 @@ export default {
         format: 'YYYY-MM-DD',
         period: 'from %s to %s'
     },
-    user: {
-        username: 'username',
-        password: 'password'
-    },
     auth: {
         title: 'authentication',
+        url: 'URL instance',
+        username: 'username',
+        password: 'password',
         login: 'login',
         logout: 'logout',
         error: {
-            login: 'authentification error'
+            login: 'authentification error',
+            invalidUrl: 'invalid url'
         }
     },
     language: {

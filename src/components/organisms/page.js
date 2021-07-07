@@ -16,8 +16,8 @@ import 'intl';
 import 'intl/locale-data/jsonp/en.js';
 import 'intl/locale-data/jsonp/fr.js';
 
-import FreedayLogo from '../../assets/freeday-logo.png';
-import FreedayLogoDark from '../../assets/freeday-logo-dark.png';
+import FreedayLogo from '../../assets/logo.png';
+import FreedayLogoDark from '../../assets/logo-dark.png';
 import { useFilter } from '../contexts/filter.js';
 import Types from '../../helpers/types.js';
 

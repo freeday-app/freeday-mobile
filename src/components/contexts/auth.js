@@ -16,6 +16,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [authData, setAuthData] = useState(null);
+    const [baseUrl, setBaseUrl] = useState(null);
     const { showToast } = useToast();
     const { getText } = useLanguage();
     const logout = async () => {
@@ -24,9 +25,12 @@ export function AuthProvider({ children }) {
         setAuthData(null);
         setLoading(false);
     };
-    const login = async (tenant, username, password) => {
+    const login = async (url, username, password) => {
         try {
+            const properUrl = API.parseUrl(url);
+            const tenant = API.getTenant(properUrl);
             const { userId, token } = await API.call({
+                baseUrl: properUrl,
                 tenant,
                 method: 'POST',
                 route: '/api/auth',
@@ -35,8 +39,11 @@ export function AuthProvider({ children }) {
                     password
                 }
             });
+            setBaseUrl(properUrl);
+            API.baseUrl = properUrl;
             API.tenant = tenant;
             API.token = token;
+            await SecureStore.setItemAsync('url', properUrl);
             await SecureStore.setItemAsync('tenant', tenant);
             await SecureStore.setItemAsync('token', token);
             setAuthData({
@@ -50,8 +57,11 @@ export function AuthProvider({ children }) {
     };
     const initAuth = async () => {
         try {
+            const url = await SecureStore.getItemAsync('url');
             const tenant = await SecureStore.getItemAsync('tenant');
             const token = await SecureStore.getItemAsync('token');
+            setBaseUrl(url);
+            API.baseUrl = url;
             API.tenant = tenant;
             API.token = token;
             const auth = await API.call({
@@ -74,6 +84,7 @@ export function AuthProvider({ children }) {
         <AuthContext.Provider
             value={{
                 loading,
+                baseUrl,
                 authData,
                 login,
                 logout

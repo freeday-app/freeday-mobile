@@ -1,3 +1,5 @@
+import { URL } from 'react-native-url-polyfill';
+
 class FetchError extends Error {
     constructor(json) {
         super(json.error);
@@ -8,6 +10,7 @@ class FetchError extends Error {
 
 const API = {
 
+    baseUrl: null,
     tenant: null,
     token: null,
 
@@ -15,10 +18,11 @@ const API = {
         method,
         route,
         body,
+        baseUrl,
         tenant,
         token
     }) {
-        const url = API.buildUrl(tenant, route);
+        const url = API.buildUrl(tenant, route, baseUrl);
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json'
@@ -48,13 +52,25 @@ const API = {
         throw new FetchError(json);
     },
 
-    buildUrl(tenant, route) {
+    buildUrl(tenant, route, baseUrl = null) {
         const urlTenant = tenant || API.tenant;
         if (!urlTenant) {
             throw new Error('Missing tenant while calling API');
         }
-        // return `https://${API.tenant}.freeday-app.com${route}`;
-        return `https://${urlTenant}.freeday.coddity.com${route}`;
+        return `${baseUrl || API.baseUrl}${route}`;
+    },
+
+    parseUrl(url) {
+        const urlObj = new URL(url);
+        if (urlObj.protocol !== 'https:') {
+            throw new Error('URL protocol should be https');
+        }
+        return urlObj.origin;
+    },
+
+    getTenant(url) {
+        const urlObj = new URL(url);
+        return urlObj.hostname.split('.').shift();
     }
 
 };
