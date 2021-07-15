@@ -1,7 +1,9 @@
 export default {
     date: {
         format: 'YYYY-MM-DD',
-        period: 'from %s to %s'
+        period: 'from %s to %s',
+        periodFrom: 'from %s',
+        periodTo: 'to %s'
     },
     auth: {
         title: 'authentication',
