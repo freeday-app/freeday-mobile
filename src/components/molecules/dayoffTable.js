@@ -37,16 +37,16 @@ export default function DayoffTable({
             <DataTable>
                 <DataTable.Header>
                     <DataTable.Title style={{ flex: 3 }}>
-                        {getText('daysoff.column.user')}
+                        {getText('daysoff.field.user')}
                     </DataTable.Title>
                     <DataTable.Title style={{ flex: 3 }}>
-                        {getText('daysoff.column.date')}
+                        {getText('daysoff.field.date')}
                     </DataTable.Title>
                     <DataTable.Title style={{ flex: 2 }}>
-                        {getText('daysoff.column.type')}
+                        {getText('daysoff.field.type')}
                     </DataTable.Title>
                     <DataTable.Title style={{ flex: 1 }}>
-                        {getText('daysoff.column.status')}
+                        {getText('daysoff.field.status')}
                     </DataTable.Title>
                 </DataTable.Header>
                 <ScrollView>

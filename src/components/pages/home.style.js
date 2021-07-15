@@ -8,15 +8,6 @@ export default StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center'
     },
-    title: {
-        fontSize: 20,
-        marginHorizontal: 10
-    },
-    monthYear: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        marginHorizontal: 10
-    },
     metrics: {
         alignItems: 'center',
         display: 'flex',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from 'react-native-paper';
 import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
@@ -6,14 +7,14 @@ import { useFilter } from '../contexts/filter.js';
 import { useLanguage } from '../contexts/language.js';
 import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
-import DayoffTable from '../molecules/dayoffTable.js';
+import DayoffItem from '../molecules/dayoffItem.js';
 
 export default function Daysoff() {
     const [loading, setLoading] = useState(true);
     const [daysoff, setDaysoff] = useState([]);
     const [loadingDayoffId, setLoadingDayoffId] = useState(null);
+    const { showFilter, filterData } = useFilter();
     const { showToast } = useToast();
-    const { filterData } = useFilter();
     const { getText } = useLanguage();
     const getDaysoff = async () => {
         try {
@@ -64,14 +65,26 @@ export default function Daysoff() {
         getDaysoff();
     }, [filterData]);
     return (
-        <Page header filter loading={loading}>
-            <DayoffTable
-                daysoff={daysoff}
-                loadingId={loadingDayoffId}
-                onAction={({ dayoffId, action }) => {
-                    dayoffAction(dayoffId, action);
-                }}
-            />
+        <Page
+            header
+            scroll
+            filter
+            loading={loading}
+            title={getText('daysoff.title')}
+            titleAction={(
+                <Button
+                    contentStyle={{ flexDirection: 'row-reverse' }}
+                    uppercase={false}
+                    icon="filter"
+                    onPress={() => showFilter()}
+                >
+                    {getText('filter.title')}
+                </Button>
+            )}
+        >
+            {daysoff.map((dayoff) => (
+                <DayoffItem key={dayoff.id} dayoff={dayoff} />
+            ))}
         </Page>
     );
 }

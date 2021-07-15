@@ -3,7 +3,9 @@ export default {
         format: 'DD/MM/YYYY',
         period: 'du %s au %s',
         periodFrom: 'du %s',
-        periodTo: 'au %s'
+        periodTo: 'au %s',
+        from: 'du',
+        to: 'au'
     },
     month: {
         1: 'janvier',
@@ -47,6 +49,7 @@ export default {
         selectPeriod: 'sélectionner une période'
     },
     filter: {
+        title: 'filtre',
         field: {
             period: 'période',
             types: "types d'absence",
@@ -67,7 +70,7 @@ export default {
     },
     daysoff: {
         title: 'absences',
-        column: {
+        field: {
             user: 'utilisateur',
             date: 'date',
             type: 'type',
@@ -88,7 +91,7 @@ export default {
         }
     },
     settings: {
-        title: 'réglages',
+        title: 'paramètres',
         darkTheme: 'thème sombre'
     },
     metric: {

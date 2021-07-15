@@ -26,9 +26,43 @@ function Page({
     theme,
     children,
     scroll,
-    loading
+    loading,
+    title,
+    preTitle,
+    postTitle,
+    titleAction
 }) {
     const { dark } = theme;
+    const contentHeader = (preTitle || title || postTitle) ? (
+        <View style={styles.contentHeader}>
+            {preTitle ? (
+                <View style={styles.contentHeaderRow}>
+                    <Text style={styles.subTitle}>
+                        {preTitle}
+                    </Text>
+                </View>
+            ) : null}
+            {title ? (
+                <View style={styles.contentHeaderRow}>
+                    <Text style={styles.title}>
+                        {title}
+                    </Text>
+                    {titleAction ? (
+                        <View style={styles.titleAction}>
+                            {titleAction}
+                        </View>
+                    ) : null}
+                </View>
+            ) : null}
+            {postTitle ? (
+                <View style={styles.contentHeaderRow}>
+                    <Text style={styles.subTitle}>
+                        {preTitle}
+                    </Text>
+                </View>
+            ) : null}
+        </View>
+    ) : null;
     let content = null;
     if (loading) {
         content = (
@@ -70,6 +104,7 @@ function Page({
                     )}
                 />
             </Appbar.Header>
+            {contentHeader}
             {content}
         </View>
     );
@@ -79,12 +114,20 @@ Page.propTypes = {
     theme: Types.theme.isRequired,
     loading: PropTypes.bool,
     children: Types.children.isRequired,
-    scroll: PropTypes.bool
+    scroll: PropTypes.bool,
+    title: PropTypes.string,
+    preTitle: PropTypes.string,
+    postTitle: PropTypes.string,
+    titleAction: Types.children
 };
 
 Page.defaultProps = {
     loading: false,
-    scroll: false
+    scroll: false,
+    title: null,
+    preTitle: null,
+    postTitle: null,
+    titleAction: null
 };
 
 export default withTheme(Page);

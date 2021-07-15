@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Text, Colors } from 'react-native-paper';
+import { Colors } from 'react-native-paper';
 import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
@@ -55,16 +55,16 @@ export default function Home() {
         getStats();
     }, []);
     return (
-        <Page header loading={loading}>
+        <Page
+            header
+            scroll
+            loading={loading}
+            preTitle={getText('home.title').toUpperCase()}
+            title={`${
+                getText(`month.${DayJS().month() + 1}`)
+            } ${DayJS().year()}`}
+        >
             <View style={styles.container}>
-                <Text style={styles.title}>
-                    {getText('home.title').toUpperCase()}
-                </Text>
-                <Text style={styles.monthYear}>
-                    {`${
-                        getText(`month.${DayJS().month() + 1}`)
-                    } ${DayJS().year()}`}
-                </Text>
                 <View style={styles.metrics}>
                     <View style={styles.metricsRow}>
                         <HomeMetric

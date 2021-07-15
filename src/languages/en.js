@@ -3,7 +3,9 @@ export default {
         format: 'YYYY-MM-DD',
         period: 'from %s to %s',
         periodFrom: 'from %s',
-        periodTo: 'to %s'
+        periodTo: 'to %s',
+        from: 'from',
+        to: 'to'
     },
     month: {
         1: 'january',
@@ -47,6 +49,7 @@ export default {
         selectPeriod: 'select a period'
     },
     filter: {
+        title: 'filter',
         field: {
             period: 'period',
             types: 'dayoff types',
@@ -67,7 +70,7 @@ export default {
     },
     daysoff: {
         title: 'daysoff',
-        column: {
+        field: {
             user: 'user',
             date: 'date',
             type: 'type',
