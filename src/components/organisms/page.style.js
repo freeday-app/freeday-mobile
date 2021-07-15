@@ -24,11 +24,12 @@ export default StyleSheet.create({
         margin: 10
     },
     headerTitleLogo: {
-        width: 25,
-        height: 25
+        width: 30,
+        height: 30
     },
     headerTitleText: {
         fontSize: 20,
+        fontWeight: 'bold',
         marginLeft: 10
     }
 });

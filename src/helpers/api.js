@@ -20,7 +20,8 @@ const API = {
         body,
         baseUrl,
         tenant,
-        token
+        token,
+        query
     }) {
         const url = API.buildUrl(tenant, route, baseUrl);
         const headers = {
@@ -44,7 +45,13 @@ const API = {
         if (body) {
             data.body = JSON.stringify(body);
         }
-        const response = await fetch(url, data);
+        let urlQuery = '';
+        if (query) {
+            urlQuery = `?${Object.keys(query).map((key) => (
+                `${key}=${query[key]}`
+            )).join('&')}`;
+        }
+        const response = await fetch(`${url}${urlQuery}`, data);
         if (response.ok) {
             return response.json();
         }

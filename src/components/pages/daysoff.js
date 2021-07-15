@@ -17,31 +17,29 @@ export default function Daysoff() {
     const { getText } = useLanguage();
     const getDaysoff = async () => {
         try {
-            const urlArgs = {
+            const query = {
                 page: 'all',
                 order: 'asc'
             };
             if (filterData.start) {
-                urlArgs.start = DayJS(filterData.start).format('YYYY-MM-DD');
+                query.start = DayJS(filterData.start).format('YYYY-MM-DD');
             }
             if (filterData.end) {
-                urlArgs.end = DayJS(filterData.end).format('YYYY-MM-DD');
+                query.end = DayJS(filterData.end).format('YYYY-MM-DD');
             }
             if (filterData.dayoffTypes.length > 0) {
-                urlArgs.type = filterData.dayoffTypes.map((d) => d.id).join(',');
+                query.type = filterData.dayoffTypes.map((d) => d.id).join(',');
             }
             if (filterData.slackUsers.length > 0) {
-                urlArgs.slackUser = filterData.slackUsers.map((s) => s.id).join(',');
+                query.slackUser = filterData.slackUsers.map((s) => s.id).join(',');
             }
             if (filterData.status.length > 0) {
-                urlArgs.status = filterData.status[0].id;
+                query.status = filterData.status[0].id;
             }
-            const urlArgString = Object.keys(urlArgs).map((key) => (
-                `${key}=${urlArgs[key]}`
-            )).join('&');
             const { daysoff: resultDaysoff } = await API.call({
                 method: 'GET',
-                route: `/api/daysoff?${urlArgString}`
+                route: '/api/daysoff',
+                query
             });
             setDaysoff(resultDaysoff);
             setLoadingDayoffId(null);

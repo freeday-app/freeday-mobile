@@ -18,7 +18,6 @@ import 'intl/locale-data/jsonp/fr.js';
 
 import FreedayLogo from '../../assets/logo.png';
 import FreedayLogoDark from '../../assets/logo-dark.png';
-import { useFilter } from '../contexts/filter.js';
 import Types from '../../helpers/types.js';
 
 import styles from './page.style.js';
@@ -27,11 +26,9 @@ function Page({
     theme,
     children,
     scroll,
-    filter,
     loading
 }) {
-    const { dark, colors } = theme;
-    const { showFilter } = useFilter();
+    const { dark } = theme;
     let content = null;
     if (loading) {
         content = (
@@ -54,7 +51,11 @@ function Page({
     }
     return (
         <View style={styles.container}>
-            <Appbar.Header>
+            <Appbar.Header
+                style={{
+                    backgroundColor: 'transparent'
+                }}
+            >
                 <Appbar.Content
                     title={(
                         <View style={styles.headerTitle}>
@@ -68,15 +69,6 @@ function Page({
                         </View>
                     )}
                 />
-                {filter ? (
-                    <>
-                        <Appbar.Action
-                            icon="filter"
-                            onPress={() => showFilter()}
-                            color={colors.text}
-                        />
-                    </>
-                ) : null}
             </Appbar.Header>
             {content}
         </View>
@@ -87,14 +79,12 @@ Page.propTypes = {
     theme: Types.theme.isRequired,
     loading: PropTypes.bool,
     children: Types.children.isRequired,
-    scroll: PropTypes.bool,
-    filter: PropTypes.bool
+    scroll: PropTypes.bool
 };
 
 Page.defaultProps = {
     loading: false,
-    scroll: false,
-    filter: false
+    scroll: false
 };
 
 export default withTheme(Page);

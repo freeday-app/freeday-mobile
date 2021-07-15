@@ -5,6 +5,20 @@ export default {
         periodFrom: 'from %s',
         periodTo: 'to %s'
     },
+    month: {
+        1: 'january',
+        2: 'february',
+        3: 'march',
+        4: 'april',
+        5: 'may',
+        6: 'june',
+        7: 'july',
+        8: 'august',
+        9: 'september',
+        10: 'october',
+        11: 'november',
+        12: 'december'
+    },
     auth: {
         title: 'authentication',
         url: 'URL instance',
@@ -44,7 +58,7 @@ export default {
         }
     },
     home: {
-        title: 'home',
+        title: 'monthly report',
         hello: 'hello %s',
         error: {
             getData: 'error while getting user data',
@@ -61,7 +75,8 @@ export default {
         },
         status: {
             confirmed: 'confirmed',
-            canceled: 'canceled'
+            canceled: 'canceled',
+            pending: 'pending'
         },
         action: {
             confirm: 'confirm',
@@ -75,5 +90,8 @@ export default {
     settings: {
         title: 'settings',
         darkTheme: 'dark theme'
+    },
+    metric: {
+        total: 'total'
     }
 };

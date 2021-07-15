@@ -5,6 +5,20 @@ export default {
         periodFrom: 'du %s',
         periodTo: 'au %s'
     },
+    month: {
+        1: 'janvier',
+        2: 'février',
+        3: 'mars',
+        4: 'avril',
+        5: 'mai',
+        6: 'juin',
+        7: 'juillet',
+        8: 'août',
+        9: 'septembre',
+        10: 'octobre',
+        11: 'novembre',
+        12: 'décembre'
+    },
     auth: {
         title: 'authentification',
         url: 'instance URL',
@@ -44,7 +58,7 @@ export default {
         }
     },
     home: {
-        title: 'accueil',
+        title: 'rapport du mois',
         hello: 'bonjour %s',
         error: {
             getData: 'erreur de récupération des données utilisateur',
@@ -61,7 +75,8 @@ export default {
         },
         status: {
             confirmed: 'confirmé',
-            canceled: 'annulé'
+            canceled: 'annulé',
+            pending: 'en attente'
         },
         action: {
             confirm: 'confirmer',
@@ -75,5 +90,8 @@ export default {
     settings: {
         title: 'réglages',
         darkTheme: 'thème sombre'
+    },
+    metric: {
+        total: 'total'
     }
 };
