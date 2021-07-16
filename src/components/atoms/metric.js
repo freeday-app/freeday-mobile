@@ -8,9 +8,9 @@ import {
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
-import styles from './homeMetric.style.js';
+import styles from './metric.style.js';
 
-export default function HomeMetric({
+export default function Metric({
     icon,
     color,
     value,
@@ -59,7 +59,7 @@ export default function HomeMetric({
     );
 }
 
-HomeMetric.propTypes = {
+Metric.propTypes = {
     icon: PropTypes.string,
     color: PropTypes.string,
     value: PropTypes.oneOfType([
@@ -71,7 +71,7 @@ HomeMetric.propTypes = {
     style: ViewPropTypes.style
 };
 
-HomeMetric.defaultProps = {
+Metric.defaultProps = {
     icon: null,
     color: 'transparent',
     raw: false,

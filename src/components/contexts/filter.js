@@ -4,11 +4,13 @@ import React, {
     useContext,
     useEffect
 } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
+    IconButton,
     Button,
     Portal,
-    Modal
+    Modal,
+    Text
 } from 'react-native-paper';
 import { DatePickerModal } from 'react-native-paper-dates';
 import DayJS from 'dayjs';
@@ -87,6 +89,29 @@ export function FilterProvider({ children }) {
     return (
         <FilterContext.Provider value={{ filterData, showFilter }}>
             <Portal>
+                <DatePickerModal
+                    locale={language}
+                    mode="range"
+                    saveLabel="Save"
+                    label={getText('button.selectPeriod')}
+                    animationType="slide"
+                    visible={datePickerVisible}
+                    onDismiss={() => setDatePickerVisible(false)}
+                    startDate={filterData.start}
+                    endDate={filterData.end}
+                    validRange={{
+                        startDate: DayJS().subtract(5, 'year').toDate(),
+                        endDate: DayJS().add(5, 'year').toDate()
+                    }}
+                    onConfirm={({ startDate, endDate }) => {
+                        setFilterData({
+                            ...filterData,
+                            start: startDate,
+                            end: endDate
+                        });
+                        setDatePickerVisible(false);
+                    }}
+                />
                 <Modal
                     visible={filterVisible}
                     onDismiss={() => setFilterVisible(false)}
@@ -96,32 +121,15 @@ export function FilterProvider({ children }) {
                         backgroundColor: themeData.colors.background
                     }}
                 >
+                    <View style={styles.title}>
+                        <IconButton icon="filter" style={styles.titleIcon} />
+                        <Text style={styles.titleText}>
+                            {getText('filter.title')}
+                        </Text>
+                    </View>
                     <ScrollView style={styles.scrollContainer}>
-                        <DatePickerModal
-                            locale={language}
-                            mode="range"
-                            saveLabel="Save"
-                            label={getText('button.selectPeriod')}
-                            animationType="slide"
-                            visible={datePickerVisible}
-                            onDismiss={() => setDatePickerVisible(false)}
-                            startDate={filterData.start}
-                            endDate={filterData.end}
-                            validRange={{
-                                startDate: DayJS().subtract(5, 'year').toDate(),
-                                endDate: DayJS().add(5, 'year').toDate()
-                            }}
-                            onConfirm={({ startDate, endDate }) => {
-                                setFilterData({
-                                    ...filterData,
-                                    start: startDate,
-                                    end: endDate
-                                });
-                                setDatePickerVisible(false);
-                            }}
-                        />
                         <Form.Container>
-                            <Form.Group>
+                            <Form.Group inline>
                                 <Form.Label>
                                     {getText('filter.field.period')}
                                 </Form.Label>
@@ -130,6 +138,7 @@ export function FilterProvider({ children }) {
                                         mode="text"
                                         uppercase={false}
                                         onPress={() => setDatePickerVisible(true)}
+                                        compact
                                     >
                                         {getText('date.period', [
                                             DayJS(filterData.start).format(getText('date.format')),

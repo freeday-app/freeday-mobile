@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Colors } from 'react-native-paper';
 import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
 import { useLanguage } from '../contexts/language.js';
-import HomeMetric from '../atoms/homeMetric.js';
+import Metric from '../atoms/metric.js';
 import Page from '../organisms/page.js';
 import API from '../../helpers/api.js';
+import Colors from '../../helpers/colors.js';
 
 import styles from './home.style.js';
 
@@ -67,30 +67,30 @@ export default function Home() {
             <View style={styles.container}>
                 <View style={styles.metrics}>
                     <View style={styles.metricsRow}>
-                        <HomeMetric
+                        <Metric
                             icon="check"
-                            color={Colors.green500}
+                            color={Colors.green}
                             value={stats.confirmed}
                             label={getText('daysoff.status.confirmed')}
                             style={styles.metric}
                         />
-                        <HomeMetric
+                        <Metric
                             icon="minus"
-                            color={Colors.grey500}
+                            color={Colors.blue}
                             value={stats.pending}
                             label={getText('daysoff.status.pending')}
                             style={styles.metric}
                         />
                     </View>
                     <View style={styles.metricsRow}>
-                        <HomeMetric
+                        <Metric
                             icon="close"
-                            color={Colors.red500}
+                            color={Colors.red}
                             value={stats.canceled}
                             label={getText('daysoff.status.canceled')}
                             style={styles.metric}
                         />
-                        <HomeMetric
+                        <Metric
                             colored={false}
                             value={stats.total}
                             label={getText('metric.total')}

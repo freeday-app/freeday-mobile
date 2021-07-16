@@ -6,14 +6,14 @@ import {
     Avatar,
     Text,
     Button,
-    IconButton,
-    Colors
+    IconButton
 } from 'react-native-paper';
 import DayJS from 'dayjs';
 import PropTypes from 'prop-types';
 
 import { useLanguage } from '../contexts/language.js';
 import Types from '../../helpers/types.js';
+import Colors from '../../helpers/colors.js';
 
 import styles from './dayoffItem.style.js';
 
@@ -40,17 +40,17 @@ export default function DayoffItem({
         }
     } = dayoff;
     let status = 'pending';
-    let statusColor = Colors.grey500;
-    let confirmButtonColor = Colors.grey500;
-    let cancelButtonColor = Colors.grey500;
+    let statusColor = Colors.blue;
+    let confirmButtonColor = Colors.lightGrey;
+    let cancelButtonColor = Colors.lightGrey;
     if (confirmed) {
         status = 'confirmed';
-        statusColor = Colors.green500;
-        confirmButtonColor = Colors.green500;
+        statusColor = Colors.green;
+        confirmButtonColor = Colors.green;
     } else if (canceled) {
         status = 'canceled';
-        statusColor = Colors.red500;
-        cancelButtonColor = Colors.red500;
+        statusColor = Colors.red;
+        cancelButtonColor = Colors.red;
     }
     return (
         <Surface style={{ ...styles.surface, backgroundColor: Colors.white, position: 'relative' }}>

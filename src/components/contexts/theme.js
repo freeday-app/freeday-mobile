@@ -19,16 +19,13 @@ const themes = {
         dark: false,
         colors: {
             ...DefaultTheme.colors,
-            primary: '#48aff0',
-            accent: '#6fc0f4',
-            background: '#f5f8fa',
-            surface: '#e0e0e0',
+            primary: '#5A6DAF',
+            accent: '#25367B',
+            background: '#ffffff',
+            surface: '#ffffff',
             text: '#000000',
             disabled: '#a1a1a1',
             placeholder: '#a1a1a1'
-            // backdrop: '',
-            // onSurface: '',
-            // notification: ''
         }
     },
     dark: {
@@ -43,9 +40,6 @@ const themes = {
             text: '#ffffff',
             disabled: '#cccccc',
             placeholder: '#cccccc'
-            // backdrop: '',
-            // onSurface: '',
-            // notification: ''
         }
     }
 };

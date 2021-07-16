@@ -21,7 +21,8 @@ export default function Select({
     items,
     selectedItems,
     onSelect,
-    clearButton
+    clearButton,
+    mode
 }) {
     const { getText } = useLanguage();
     const { themeData } = useTheme();
@@ -141,7 +142,7 @@ export default function Select({
                 labelStyle={{
                     flexGrow: 1
                 }}
-                mode="outlined"
+                mode={mode}
                 uppercase={false}
                 onPress={() => setOpen(true)}
             >
@@ -223,10 +224,12 @@ Select.propTypes = {
     selectedItems: PropTypes.arrayOf(itemType).isRequired,
     onSelect: PropTypes.func.isRequired,
     multiple: PropTypes.bool,
-    clearButton: PropTypes.bool
+    clearButton: PropTypes.bool,
+    mode: PropTypes.oneOf(['text', 'contained', 'outlined'])
 };
 
 Select.defaultProps = {
     multiple: false,
-    clearButton: false
+    clearButton: false,
+    mode: 'outlined'
 };
