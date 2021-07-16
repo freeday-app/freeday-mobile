@@ -5,7 +5,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         display: 'flex',
-        elevation: 10,
+        elevation: 5,
         flexDirection: 'row',
         padding: 10
     },

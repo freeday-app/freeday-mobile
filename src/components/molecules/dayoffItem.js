@@ -1,24 +1,32 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
+    ActivityIndicator,
     Surface,
     Avatar,
     Text,
     Button,
+    IconButton,
     Colors
 } from 'react-native-paper';
 import DayJS from 'dayjs';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { useLanguage } from '../contexts/language.js';
 import Types from '../../helpers/types.js';
 
 import styles from './dayoffItem.style.js';
 
-export default function DayoffItem({ dayoff }) {
+export default function DayoffItem({
+    dayoff,
+    onConfirm,
+    onCancel,
+    onReset,
+    loading
+}) {
     const { getText } = useLanguage();
     const {
-        // id,
+        id,
         start,
         end,
         confirmed,
@@ -32,67 +40,95 @@ export default function DayoffItem({ dayoff }) {
         }
     } = dayoff;
     let status = 'pending';
-    if (confirmed) { status = 'confirmed'; }
-    if (canceled) { status = 'canceled'; }
+    let statusColor = Colors.grey500;
+    let confirmButtonColor = Colors.grey500;
+    let cancelButtonColor = Colors.grey500;
+    if (confirmed) {
+        status = 'confirmed';
+        statusColor = Colors.green500;
+        confirmButtonColor = Colors.green500;
+    } else if (canceled) {
+        status = 'canceled';
+        statusColor = Colors.red500;
+        cancelButtonColor = Colors.red500;
+    }
     return (
-        <Surface style={styles.surface}>
-            <View>
-                <Avatar.Image
-                    size={24}
-                    source={{ uri: avatar }}
-                />
-                <View>
-                    <Text>{username}</Text>
-                    <View>
-                        <Text>
+        <Surface style={{ ...styles.surface, backgroundColor: Colors.white, position: 'relative' }}>
+            <View style={{ ...styles.row, ...styles.marginBottom }}>
+                {loading ? (
+                    <ActivityIndicator
+                        size={40}
+                        style={styles.avatar}
+                    />
+                ) : (
+                    <Avatar.Image
+                        size={40}
+                        source={{ uri: avatar }}
+                        style={styles.avatar}
+                    />
+                )}
+                <View style={styles.headInfo}>
+                    <Text style={styles.username}>
+                        {username}
+                    </Text>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>
                             {`${getText('daysoff.field.status')} : `}
                         </Text>
-                        <Text>
+                        <Text style={{ ...styles.value, color: statusColor }}>
                             {getText(`daysoff.status.${status}`)}
                         </Text>
                     </View>
                 </View>
             </View>
-            <View>
-                <Text>
+            <View style={styles.row}>
+                <Text style={styles.label}>
                     {`${getText('daysoff.field.type')} : `}
                 </Text>
-                <Text>
+                <Text style={styles.value}>
                     {type}
                 </Text>
             </View>
-            <View>
-                <Text>
+            <View style={{ ...styles.row, ...styles.marginBottom }}>
+                <Text style={styles.label}>
                     {`${getText('date.from')} `}
                 </Text>
-                <Text>
+                <Text style={styles.value}>
                     {DayJS(start).format(getText('date.format'))}
                 </Text>
-                <Text>
-                    {`${getText('date.to')} `}
+                <Text style={styles.label}>
+                    {` ${getText('date.to', null, false)} `}
                 </Text>
-                <Text>
+                <Text style={styles.value}>
                     {DayJS(end).format(getText('date.format'))}
                 </Text>
             </View>
-            <View>
-                <View>
-                    <Button>
+            <View style={styles.row}>
+                <View style={styles.reset}>
+                    <Button mode="text" onPress={() => onReset(id)} compact>
                         {getText('daysoff.action.reset')}
                     </Button>
                 </View>
-                <View>
-                    <Avatar.Icon
-                        size={25}
+                <View style={styles.actions}>
+                    <IconButton
                         icon="check"
-                        backgroundColor={Colors.green500}
+                        size={20}
                         color={Colors.white}
+                        style={{
+                            ...styles.action,
+                            backgroundColor: confirmButtonColor
+                        }}
+                        onPress={() => onConfirm(id)}
                     />
-                    <Avatar.Icon
-                        size={25}
+                    <IconButton
                         icon="close"
-                        backgroundColor={Colors.red500}
+                        size={20}
                         color={Colors.white}
+                        style={{
+                            ...styles.action,
+                            backgroundColor: cancelButtonColor
+                        }}
+                        onPress={() => onCancel(id)}
                     />
                 </View>
             </View>
@@ -101,5 +137,13 @@ export default function DayoffItem({ dayoff }) {
 }
 
 DayoffItem.propTypes = {
-    dayoff: Types.dayoff.isRequired
+    dayoff: Types.dayoff.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    loading: PropTypes.bool
+};
+
+DayoffItem.defaultProps = {
+    loading: false
 };

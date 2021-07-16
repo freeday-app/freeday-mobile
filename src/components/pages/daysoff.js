@@ -9,6 +9,8 @@ import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
 import DayoffItem from '../molecules/dayoffItem.js';
 
+import styles from './daysoff.style.js';
+
 export default function Daysoff() {
     const [loading, setLoading] = useState(true);
     const [daysoff, setDaysoff] = useState([]);
@@ -73,6 +75,7 @@ export default function Daysoff() {
             title={getText('daysoff.title')}
             titleAction={(
                 <Button
+                    labelStyle={styles.filterButton}
                     contentStyle={{ flexDirection: 'row-reverse' }}
                     uppercase={false}
                     icon="filter"
@@ -83,7 +86,14 @@ export default function Daysoff() {
             )}
         >
             {daysoff.map((dayoff) => (
-                <DayoffItem key={dayoff.id} dayoff={dayoff} />
+                <DayoffItem
+                    key={dayoff.id}
+                    dayoff={dayoff}
+                    onConfirm={(id) => dayoffAction(id, 'confirm')}
+                    onCancel={(id) => dayoffAction(id, 'cancel')}
+                    onReset={(id) => dayoffAction(id, 'reset')}
+                    loading={loadingDayoffId === dayoff.id}
+                />
             ))}
         </Page>
     );

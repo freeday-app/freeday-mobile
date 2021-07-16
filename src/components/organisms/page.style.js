@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-        paddingBottom: 210,
+        paddingBottom: 134,
         width: '100%'
     },
     loading: {
