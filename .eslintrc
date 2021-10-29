@@ -1,5 +1,5 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "env": {
         "browser": true
     },
@@ -17,21 +17,13 @@
         "indent": ["error", 4, {
             "SwitchCase": 1
         }],
-        // "no-param-reassign": ["error", {
-        //     "props": false
-        // }],
         "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
         "react/display-name": "off",
         "react/jsx-filename-extension": ["error", {
             "extensions": [".js"]
         }],
         "react/jsx-indent": ["error", 4],
-        "react/jsx-indent-props": ["error", 4],
-        // "react/jsx-props-no-spreading": "off",
-        // "react/prop-types": "off",
-        // "no-console": ["error", {
-        //     "allow": ["error"]
-        // }]
+        "react/jsx-indent-props": ["error", 4]
     },
     "ignorePatterns": [
         ".expo/",
