@@ -42,6 +42,10 @@ export function FilterProvider({ children }) {
             id: 'canceled',
             name: getText('daysoff.status.canceled'),
             icon: 'window-close'
+        }, {
+            id: 'pending',
+            name: getText('daysoff.status.pending'),
+            icon: 'minus'
         }]
     });
     const [filterData, setFilterData] = useState({
