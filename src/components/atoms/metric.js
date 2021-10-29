@@ -8,6 +8,8 @@ import {
 } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
+import { useTheme } from '../contexts/theme.js';
+
 import styles from './metric.style.js';
 
 export default function Metric({
@@ -18,6 +20,7 @@ export default function Metric({
     raw,
     style
 }) {
+    const { themeData } = useTheme();
     const rawStyle = raw ? styles.surfaceRaw : {};
     return (
         <Surface
@@ -41,7 +44,7 @@ export default function Metric({
                 <Text
                     style={{
                         ...styles.value,
-                        color: raw ? Colors.black : Colors.white
+                        color: raw ? themeData.colors.text : Colors.white
                     }}
                 >
                     {value.toString()}
@@ -49,7 +52,7 @@ export default function Metric({
                 <Text
                     style={{
                         ...styles.label,
-                        color: raw ? Colors.black : Colors.white
+                        color: raw ? themeData.colors.text : Colors.white
                     }}
                 >
                     {label}

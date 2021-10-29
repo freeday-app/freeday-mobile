@@ -32,7 +32,7 @@ const themes = {
         ...DarkTheme,
         dark: true,
         colors: {
-            ...DefaultTheme.colors,
+            ...DarkTheme.colors,
             primary: '#137cbd',
             accent: '#48aff0',
             background: '#333333',

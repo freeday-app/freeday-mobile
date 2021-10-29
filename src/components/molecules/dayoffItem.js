@@ -12,6 +12,7 @@ import DayJS from 'dayjs';
 import PropTypes from 'prop-types';
 
 import { useLanguage } from '../contexts/language.js';
+import { useTheme } from '../contexts/theme.js';
 import Types from '../../helpers/types.js';
 import Colors from '../../helpers/colors.js';
 
@@ -25,6 +26,7 @@ export default function DayoffItem({
     loading
 }) {
     const { getText } = useLanguage();
+    const { themeData } = useTheme();
     const {
         id,
         start,
@@ -53,7 +55,7 @@ export default function DayoffItem({
         cancelButtonColor = Colors.red;
     }
     return (
-        <Surface style={{ ...styles.surface, backgroundColor: Colors.white, position: 'relative' }}>
+        <Surface style={{ ...styles.surface, backgroundColor: themeData.colors.surface, position: 'relative' }}>
             <View style={{ ...styles.row, ...styles.marginBottom }}>
                 {loading ? (
                     <ActivityIndicator
