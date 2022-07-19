@@ -49,13 +49,16 @@ export function FilterProvider({ children }) {
             icon: 'minus'
         }]
     });
-    const [filterData, setFilterData] = useState({
+
+    const defaultFilterData = {
         start: DayJS().startOf('month').toDate(),
         end: DayJS().endOf('month').toDate(),
         dayoffTypes: [],
         slackUsers: [],
         status: []
-    });
+    };
+
+    const [filterData, setFilterData] = useState(defaultFilterData);
     const [filterVisible, setFilterVisible] = useState(false);
     const [datePickerVisible, setDatePickerVisible] = useState(false);
     const [activeFilterCount, setActiveFilterCount] = useState(0);
@@ -77,6 +80,10 @@ export function FilterProvider({ children }) {
 
     const showFilter = () => {
         setFilterVisible(true);
+    };
+
+    const resetFilter = () => {
+        setFilterData(defaultFilterData)
     };
 
     const getFilterMetaData = async () => {
@@ -166,9 +173,20 @@ export function FilterProvider({ children }) {
                         <Text style={styles.titleText}>
                             {getText('filter.title')}
                         </Text>
+                        {isFilterActive ? (
+                            <Button
+                                icon="close"
+                                mode="text"
+                                onPress={() => resetFilter()}
+                                style={styles.clearButton}
+                                labelStyle={styles.clearButtonTitle}
+                            >
+                                {getText('button.clear')}
+                            </Button>
+                        ) : null}
                     </View>
                     <ScrollView style={styles.scrollContainer}>
-                        <Form.Container>
+                        <Form.Container style={styles.formContainer}>
                             <Form.Group inline>
                                 <Form.Label>
                                     {getText('filter.field.period')}

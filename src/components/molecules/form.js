@@ -6,9 +6,14 @@ import PropTypes from 'prop-types';
 import styles from './form.style.js';
 import Types from '../../helpers/types.js';
 
-function Container({ children }) {
+function Container({ children, style }) {
     return (
-        <View style={styles.form}>
+        <View
+            style={{
+                ...styles.form,
+                ...(style ?? {})
+            }}
+            >
             {children}
         </View>
     );
@@ -22,7 +27,8 @@ function Group({
     children,
     row,
     center,
-    inline
+    inline,
+    style
 }) {
     const rowStyle = row ? styles.groupRow : {};
     const centerStyle = center ? styles.groupCenter : {};
@@ -39,7 +45,8 @@ function Group({
                 ...styles.group,
                 ...rowStyle,
                 ...centerStyle,
-                ...directionStyle
+                ...directionStyle,
+                ...(style ?? {})
             }}
         >
             {childrenWithProps}
@@ -60,10 +67,16 @@ Group.defaultProps = {
     inline: false
 };
 
-function Label({ children, inline }) {
+function Label({ children, inline, style }) {
     const directionStyle = inline ? styles.labelInline : styles.labelBlock;
     return (
-        <View style={{ ...styles.label, ...directionStyle }}>
+        <View
+            style={{
+                ...styles.label,
+                ...directionStyle,
+                ...(style ?? {})
+            }}
+        >
             <Text style={styles.labelText}>
                 {children}
             </Text>
@@ -80,10 +93,16 @@ Label.defaultProps = {
     inline: false
 };
 
-function Input({ children, inline }) {
+function Input({ children, inline, style }) {
     const directionStyle = inline ? styles.inputInline : styles.inputBlock;
     return (
-        <View style={{ ...styles.input, ...directionStyle }}>
+        <View
+            style={{
+                ...styles.input,
+                ...directionStyle,
+                ...(style ?? {})
+            }}
+        >
             {children}
         </View>
     );

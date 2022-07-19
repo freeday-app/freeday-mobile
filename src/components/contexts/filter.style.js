@@ -1,6 +1,17 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../helpers/colors.js';
 
 export default StyleSheet.create({
+    clearButton: {
+        borderColor: Colors.red,
+        color: Colors.red
+    },
+    clearButtonTitle: {
+        color: Colors.red
+    },
+    formContainer: {
+        paddingVertical: 15
+    },
     modal: {
         display: 'flex',
         flexDirection: 'column',
