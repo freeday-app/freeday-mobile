@@ -31,6 +31,7 @@ export function FilterProvider({ children }) {
     const { showToast } = useToast();
     const { language, getText } = useLanguage();
     const { themeData } = useTheme();
+
     const [filterMetaData, setFilterMetaData] = useState({
         dayoffTypes: [],
         slackUsers: [],
@@ -57,9 +58,27 @@ export function FilterProvider({ children }) {
     });
     const [filterVisible, setFilterVisible] = useState(false);
     const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const [activeFilterCount, setActiveFilterCount] = useState(0);
+    const [isFilterActive, setIsFilterActive] = useState(activeFilterCount > 0);
+
+    const countActiveFilters = () => {
+        let filterCount = 0;
+        if (filterData.dayoffTypes.length) { filterCount += 1; }
+        if (filterData.slackUsers.length) { filterCount += 1; }
+        if (filterData.status.length) { filterCount += 1; }
+        if (
+            DayJS(filterData.start).format('YYYY-MM-DD') !== DayJS().startOf('month').format('YYYY-MM-DD')
+            || DayJS(filterData.end).format('YYYY-MM-DD') !== DayJS().endOf('month').format('YYYY-MM-DD')
+        ) {
+            filterCount += 1;
+        }
+        return filterCount;
+    };
+
     const showFilter = () => {
         setFilterVisible(true);
     };
+
     const getFilterMetaData = async () => {
         try {
             const { dayoffTypes } = await API.call({
@@ -87,11 +106,28 @@ export function FilterProvider({ children }) {
             showToast(getText('filter.error.getData'));
         }
     };
+
     useEffect(() => {
         getFilterMetaData();
     }, []);
+
+    useEffect(() => {
+        setActiveFilterCount(countActiveFilters());
+    }, [filterData]);
+
+    useEffect(() => {
+        setIsFilterActive(activeFilterCount > 0);
+    }, [activeFilterCount]);
+
     return (
-        <FilterContext.Provider value={{ filterData, showFilter }}>
+        <FilterContext.Provider
+            value={{
+                filterData,
+                showFilter,
+                activeFilterCount,
+                isFilterActive
+            }}
+        >
             <Portal>
                 <DatePickerModal
                     locale={language}

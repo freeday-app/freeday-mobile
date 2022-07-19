@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-native-paper';
+import { Text, View } from 'react-native';
+import { Button, useTheme } from 'react-native-paper';
 import DayJS from 'dayjs';
 
 import { useToast } from '../contexts/toast.js';
@@ -9,13 +10,18 @@ import API from '../../helpers/api.js';
 import Page from '../organisms/page.js';
 import DayoffItem from '../molecules/dayoffItem.js';
 
-import styles from './daysoff.style.js';
+import getStyles from './daysoff.style.js';
 
 export default function Daysoff() {
     const [loading, setLoading] = useState(true);
     const [daysoff, setDaysoff] = useState([]);
     const [loadingDayoffId, setLoadingDayoffId] = useState(null);
-    const { showFilter, filterData } = useFilter();
+    const {
+        showFilter,
+        filterData,
+        activeFilterCount,
+        isFilterActive
+    } = useFilter();
     const { showToast } = useToast();
     const { getText } = useLanguage();
     const getDaysoff = async () => {
@@ -63,6 +69,11 @@ export default function Daysoff() {
             showToast(getText('daysoff.error.action'));
         }
     };
+
+    const { colors } = useTheme();
+
+    const styles = getStyles(colors);
+
     useEffect(() => {
         getDaysoff();
     }, [filterData]);
@@ -74,15 +85,24 @@ export default function Daysoff() {
             loading={loading}
             title={getText('daysoff.title')}
             titleAction={(
-                <Button
-                    labelStyle={styles.filterButton}
-                    contentStyle={{ flexDirection: 'row-reverse' }}
-                    uppercase={false}
-                    icon="filter"
-                    onPress={() => showFilter()}
-                >
-                    {getText('filter.title')}
-                </Button>
+                <View style={styles.filterContainer}>
+                    <Button
+                        labelStyle={styles.filterButton}
+                        contentStyle={{ flexDirection: 'row-reverse' }}
+                        uppercase={false}
+                        icon={isFilterActive
+                            ? () => (
+                                <View style={styles.filterIndicatorContainer}>
+                                    <Text style={styles.filterIndicator}>
+                                        {activeFilterCount}
+                                    </Text>
+                                </View>
+                            ) : 'filter'}
+                        onPress={() => showFilter()}
+                    >
+                        {getText('filter.title')}
+                    </Button>
+                </View>
             )}
         >
             {daysoff.map((dayoff) => (
