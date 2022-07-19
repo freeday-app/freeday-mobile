@@ -96,5 +96,21 @@ export default {
     },
     metric: {
         total: 'total'
+    },
+    reactNativePaperDates: {
+        save: 'Enregistrer',
+        selectSingle: 'Sélection de date',
+        selectMultiple: 'Sélection de dates',
+        selectRange: 'Sélection de période',
+        notAccordingToDateFormat: (inputFormat) => `Format de date attendu: ${inputFormat}`,
+        mustBeHigherThan: (date) => `Doit être supérieur à ${date}`,
+        mustBeLowerThan: (date) => `Doit être inférieur à ${date}`,
+        mustBeBetween: (startDate, endDate) => `Doit être entre ${startDate} et ${endDate}`,
+        dateIsDisabled: 'Jour non autorisé',
+        previous: 'Précédent',
+        next: 'Suivant',
+        typeInDate: 'Saisir une date',
+        pickDateFromCalendar: 'Choisir une date du calendrier',
+        close: 'Fermer'
     }
 };

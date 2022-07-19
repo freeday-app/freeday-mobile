@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import { View } from 'react-native';
 import {
     Surface,
     Avatar,
@@ -71,7 +71,7 @@ Metric.propTypes = {
     ]).isRequired,
     label: PropTypes.string.isRequired,
     raw: PropTypes.bool,
-    style: ViewPropTypes.style
+    style: PropTypes.object
 };
 
 Metric.defaultProps = {

@@ -12,7 +12,11 @@ import {
     Modal,
     Text
 } from 'react-native-paper';
-import { DatePickerModal } from 'react-native-paper-dates';
+import {
+    DatePickerModal,
+    registerTranslation,
+    en as reactNativePaperDatesEnLanguage
+} from 'react-native-paper-dates';
 import DayJS from 'dayjs';
 
 import { useToast } from './toast.js';
@@ -22,8 +26,12 @@ import Form from '../molecules/form.js';
 import Select from '../atoms/select.js';
 import API from '../../helpers/api.js';
 import Types from '../../helpers/types.js';
+import frLanguage from '../../languages/fr.js';
 
 import styles from './filter.style.js';
+
+registerTranslation('en', reactNativePaperDatesEnLanguage);
+registerTranslation('fr', frLanguage.reactNativePaperDates);
 
 const FilterContext = createContext();
 

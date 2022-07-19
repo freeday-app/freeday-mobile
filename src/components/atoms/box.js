@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import { View } from 'react-native';
 import {
     Surface,
     Text,
@@ -39,7 +39,7 @@ Box.propTypes = {
     label: PropTypes.string.isRequired,
     color: PropTypes.string,
     content: Types.children.isRequired,
-    style: ViewPropTypes.style
+    style: PropTypes.object
 };
 
 Box.defaultProps = {
