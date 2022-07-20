@@ -9,6 +9,12 @@ import Home from '../pages/home.js';
 import Daysoff from '../pages/daysoff.js';
 import Settings from '../pages/settings.js';
 
+const renderScene = BottomNavigation.SceneMap({
+    home: () => <Home />,
+    daysoff: () => <Daysoff />,
+    settings: () => <Settings />
+});
+
 export default function Router() {
     const { authData } = useAuth();
     const { getText } = useLanguage();
@@ -26,11 +32,6 @@ export default function Router() {
         title: getText('settings.title'),
         icon: 'cog'
     }];
-    const renderScene = BottomNavigation.SceneMap({
-        home: () => <Home />,
-        daysoff: () => <Daysoff />,
-        settings: () => <Settings />
-    });
     useEffect(() => {
         setIndex(0);
     }, [authData]);

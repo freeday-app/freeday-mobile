@@ -1,7 +1,8 @@
 import React, {
     createContext,
     useState,
-    useContext
+    useContext,
+    useMemo
 } from 'react';
 import { Snackbar } from 'react-native-paper';
 
@@ -16,8 +17,13 @@ export function ToastProvider({ children }) {
         setText(toastText);
         setVisible(true);
     };
+    const contextValue = useMemo(() => ({
+        showToast
+    }), [
+        showToast
+    ]);
     return (
-        <ToastContext.Provider value={{ showToast }}>
+        <ToastContext.Provider value={contextValue}>
             <Snackbar
                 visible={visible}
                 duration={2000}

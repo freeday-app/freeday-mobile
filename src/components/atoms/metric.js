@@ -71,6 +71,9 @@ Metric.propTypes = {
     ]).isRequired,
     label: PropTypes.string.isRequired,
     raw: PropTypes.bool,
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object
 };
 

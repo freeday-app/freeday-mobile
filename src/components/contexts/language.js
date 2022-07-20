@@ -2,7 +2,9 @@ import React, {
     useState,
     createContext,
     useContext,
-    useEffect
+    useEffect,
+    useMemo,
+    useCallback
 } from 'react';
 import * as SecureStore from 'expo-secure-store';
 
@@ -44,7 +46,7 @@ export function LanguageProvider({ children }) {
         }
         return replaced;
     };
-    const getText = (fullKey, args = null, ucfirst = true) => {
+    const getText = useCallback((fullKey, args = null, ucfirst = true) => {
         const error = `Error while getting text ${fullKey} with language ${language}`;
         let text = languages[language];
         const keys = fullKey.split('.');
@@ -64,15 +66,18 @@ export function LanguageProvider({ children }) {
             return setArgs(rawText, args);
         }
         return rawText;
-    };
+    }, [language]);
+    const contextValue = useMemo(() => ({
+        language,
+        setLanguage,
+        getText
+    }), [
+        language,
+        setLanguage,
+        getText
+    ]);
     return (
-        <LanguageContext.Provider
-            value={{
-                language,
-                setLanguage,
-                getText
-            }}
-        >
+        <LanguageContext.Provider value={contextValue}>
             {children}
         </LanguageContext.Provider>
     );

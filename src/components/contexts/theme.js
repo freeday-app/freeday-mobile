@@ -2,7 +2,8 @@ import React, {
     useState,
     createContext,
     useContext,
-    useEffect
+    useEffect,
+    useMemo
 } from 'react';
 import {
     Provider as PaperProvider,
@@ -44,12 +45,11 @@ const themes = {
     }
 };
 
-const getTheme = (theme) => themes[theme];
-
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState('light');
+    const [themeData, setThemeData] = useState(themes[theme]);
     const getStoredTheme = async () => {
         const storedTheme = await SecureStore.getItemAsync('theme');
         if (storedTheme) {
@@ -67,10 +67,19 @@ export function ThemeProvider({ children }) {
             throw new Error(`Invalid theme ${theme}`);
         }
         storeTheme();
+        setThemeData(themes[theme]);
     }, [theme]);
-    const themeData = getTheme(theme);
+    const contextValue = useMemo(() => ({
+        theme,
+        setTheme,
+        themeData
+    }), [
+        theme,
+        setTheme,
+        themeData
+    ]);
     return (
-        <ThemeContext.Provider value={{ theme, setTheme, themeData }}>
+        <ThemeContext.Provider value={contextValue}>
             <PaperProvider theme={themeData}>
                 {children}
             </PaperProvider>

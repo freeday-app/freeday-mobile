@@ -98,6 +98,11 @@ export default function Select({
         }
         return null;
     };
+    const getListItemRight = (item, props) => (
+        multiple && multipleSelectedItemsObj[item.id] ? (
+            <List.Icon {...props} icon="check" />
+        ) : null
+    );
     const getButtons = () => {
         if (multiple) {
             return (
@@ -188,11 +193,7 @@ export default function Select({
                                         key={item.id}
                                         title={item.name}
                                         left={(props) => getListItemLeft(item, props)}
-                                        right={(props) => (
-                                            multiple && multipleSelectedItemsObj[item.id] ? (
-                                                <List.Icon {...props} icon="check" />
-                                            ) : null
-                                        )}
+                                        right={(props) => getListItemRight(item, props)}
                                         onPress={() => {
                                             selectItem(item.id);
                                         }}

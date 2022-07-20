@@ -13,9 +13,6 @@ import DayoffItem from '../molecules/dayoffItem.js';
 import getStyles from './daysoff.style.js';
 
 export default function Daysoff() {
-    const [loading, setLoading] = useState(true);
-    const [daysoff, setDaysoff] = useState([]);
-    const [loadingDayoffId, setLoadingDayoffId] = useState(null);
     const {
         showFilter,
         filterData,
@@ -24,6 +21,14 @@ export default function Daysoff() {
     } = useFilter();
     const { showToast } = useToast();
     const { getText } = useLanguage();
+    const { colors } = useTheme();
+
+    const [loading, setLoading] = useState(true);
+    const [daysoff, setDaysoff] = useState([]);
+    const [loadingDayoffId, setLoadingDayoffId] = useState(null);
+
+    const styles = getStyles(colors);
+
     const getDaysoff = async () => {
         try {
             const query = {
@@ -57,6 +62,7 @@ export default function Daysoff() {
             showToast(getText('daysoff.error.getData'));
         }
     };
+
     const dayoffAction = async (dayoffId, action) => {
         try {
             setLoadingDayoffId(dayoffId);
@@ -70,13 +76,21 @@ export default function Daysoff() {
         }
     };
 
-    const { colors } = useTheme();
-
-    const styles = getStyles(colors);
+    const getFilterButtonIcon = () => (
+        isFilterActive
+            ? () => (
+                <View style={styles.filterIndicatorContainer}>
+                    <Text style={styles.filterIndicator}>
+                        {activeFilterCount}
+                    </Text>
+                </View>
+            ) : 'filter'
+    );
 
     useEffect(() => {
         getDaysoff();
     }, [filterData]);
+
     return (
         <Page
             header
@@ -90,14 +104,7 @@ export default function Daysoff() {
                         labelStyle={styles.filterButton}
                         contentStyle={{ flexDirection: 'row-reverse' }}
                         uppercase={false}
-                        icon={isFilterActive
-                            ? () => (
-                                <View style={styles.filterIndicatorContainer}>
-                                    <Text style={styles.filterIndicator}>
-                                        {activeFilterCount}
-                                    </Text>
-                                </View>
-                            ) : 'filter'}
+                        icon={getFilterButtonIcon()}
                         onPress={() => showFilter()}
                     >
                         {getText('filter.title')}

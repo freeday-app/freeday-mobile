@@ -2,7 +2,8 @@ import React, {
     createContext,
     useState,
     useContext,
-    useEffect
+    useEffect,
+    useMemo
 } from 'react';
 import * as SecureStore from 'expo-secure-store';
 
@@ -80,16 +81,21 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         initAuth();
     }, []);
+    const contextValue = useMemo(() => ({
+        loading,
+        baseUrl,
+        authData,
+        login,
+        logout
+    }), [
+        loading,
+        baseUrl,
+        authData,
+        login,
+        logout
+    ]);
     return (
-        <AuthContext.Provider
-            value={{
-                loading,
-                baseUrl,
-                authData,
-                login,
-                logout
-            }}
-        >
+        <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
     );

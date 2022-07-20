@@ -13,14 +13,22 @@ function Container({ children, style }) {
                 ...styles.form,
                 ...(style ?? {})
             }}
-            >
+        >
             {children}
         </View>
     );
 }
 
 Container.propTypes = {
-    children: Types.children.isRequired
+    children: Types.children.isRequired,
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object
+};
+
+Container.defaultProps = {
+    style: {}
 };
 
 function Group({
@@ -58,13 +66,18 @@ Group.propTypes = {
     children: Types.children.isRequired,
     row: PropTypes.bool,
     center: PropTypes.bool,
-    inline: PropTypes.bool
+    inline: PropTypes.bool,
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object
 };
 
 Group.defaultProps = {
     row: false,
     center: false,
-    inline: false
+    inline: false,
+    style: {}
 };
 
 function Label({ children, inline, style }) {
@@ -86,11 +99,16 @@ function Label({ children, inline, style }) {
 
 Label.propTypes = {
     children: Types.children.isRequired,
-    inline: PropTypes.bool
+    inline: PropTypes.bool,
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object
 };
 
 Label.defaultProps = {
-    inline: false
+    inline: false,
+    style: {}
 };
 
 function Input({ children, inline, style }) {
@@ -110,11 +128,16 @@ function Input({ children, inline, style }) {
 
 Input.propTypes = {
     children: Types.children.isRequired,
-    inline: PropTypes.bool
+    inline: PropTypes.bool,
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object
 };
 
 Input.defaultProps = {
-    inline: false
+    inline: false,
+    style: {}
 };
 
 export default {

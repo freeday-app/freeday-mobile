@@ -2,7 +2,8 @@ import React, {
     createContext,
     useState,
     useContext,
-    useEffect
+    useEffect,
+    useMemo
 } from 'react';
 import { ScrollView, View } from 'react-native';
 import {
@@ -91,7 +92,7 @@ export function FilterProvider({ children }) {
     };
 
     const resetFilter = () => {
-        setFilterData(defaultFilterData)
+        setFilterData(defaultFilterData);
     };
 
     const getFilterMetaData = async () => {
@@ -134,15 +135,20 @@ export function FilterProvider({ children }) {
         setIsFilterActive(activeFilterCount > 0);
     }, [activeFilterCount]);
 
+    const contextValue = useMemo(() => ({
+        filterData,
+        showFilter,
+        activeFilterCount,
+        isFilterActive
+    }), [
+        filterData,
+        showFilter,
+        activeFilterCount,
+        isFilterActive
+    ]);
+
     return (
-        <FilterContext.Provider
-            value={{
-                filterData,
-                showFilter,
-                activeFilterCount,
-                isFilterActive
-            }}
-        >
+        <FilterContext.Provider value={contextValue}>
             <Portal>
                 <DatePickerModal
                     locale={language}
