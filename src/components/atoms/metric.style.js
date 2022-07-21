@@ -7,7 +7,8 @@ export default StyleSheet.create({
         display: 'flex',
         elevation: 5,
         flexDirection: 'row',
-        padding: 10
+        padding: 10,
+        width: 190
     },
     surfaceRaw: {
         elevation: 0

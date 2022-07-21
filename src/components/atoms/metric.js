@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import {
     Surface,
     Avatar,
@@ -18,47 +18,52 @@ export default function Metric({
     value,
     label,
     raw,
-    style
+    style,
+    onPress
 }) {
     const { themeData } = useTheme();
     const rawStyle = raw ? styles.surfaceRaw : {};
     return (
-        <Surface
-            style={{
-                ...styles.surface,
-                ...rawStyle,
-                backgroundColor: color,
-                ...style
-            }}
+        <Pressable
+            onPress={onPress}
         >
-            {icon ? (
-                <Avatar.Icon
-                    size={35}
-                    icon={icon}
-                    backgroundColor={Colors.white}
-                    color={color}
-                    style={styles.leftIcon}
-                />
-            ) : null}
-            <View style={styles.rightContainer}>
-                <Text
-                    style={{
-                        ...styles.value,
-                        color: raw ? themeData.colors.text : Colors.white
-                    }}
-                >
-                    {value.toString()}
-                </Text>
-                <Text
-                    style={{
-                        ...styles.label,
-                        color: raw ? themeData.colors.text : Colors.white
-                    }}
-                >
-                    {label}
-                </Text>
-            </View>
-        </Surface>
+            <Surface
+                style={{
+                    ...styles.surface,
+                    ...rawStyle,
+                    backgroundColor: color,
+                    ...style
+                }}
+            >
+                {icon ? (
+                    <Avatar.Icon
+                        size={35}
+                        icon={icon}
+                        backgroundColor={Colors.white}
+                        color={color}
+                        style={styles.leftIcon}
+                    />
+                ) : null}
+                <View style={styles.rightContainer}>
+                    <Text
+                        style={{
+                            ...styles.value,
+                            color: raw ? themeData.colors.text : Colors.white
+                        }}
+                    >
+                        {value.toString()}
+                    </Text>
+                    <Text
+                        style={{
+                            ...styles.label,
+                            color: raw ? themeData.colors.text : Colors.white
+                        }}
+                    >
+                        {label}
+                    </Text>
+                </View>
+            </Surface>
+        </Pressable>
     );
 }
 
@@ -74,12 +79,14 @@ Metric.propTypes = {
     // ViewPropTypes.style is deprecated
     // it's replaced with PropTypes.object for now
     // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object
+    style: PropTypes.object,
+    onPress: PropTypes.func
 };
 
 Metric.defaultProps = {
     icon: null,
     color: 'transparent',
     raw: false,
-    style: {}
+    style: {},
+    onPress: () => {}
 };

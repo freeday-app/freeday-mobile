@@ -137,11 +137,13 @@ export function FilterProvider({ children }) {
 
     const contextValue = useMemo(() => ({
         filterData,
+        setFilterData,
         showFilter,
         activeFilterCount,
         isFilterActive
     }), [
         filterData,
+        setFilterData,
         showFilter,
         activeFilterCount,
         isFilterActive

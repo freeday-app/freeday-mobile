@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import DayJS from 'dayjs';
+import PropTypes from 'prop-types';
 
 import { useToast } from '../contexts/toast.js';
 import { useLanguage } from '../contexts/language.js';
+import { useFilter } from '../contexts/filter.js';
 import Metric from '../atoms/metric.js';
 import Page from '../organisms/page.js';
 import API from '../../helpers/api.js';
@@ -11,7 +13,7 @@ import Colors from '../../helpers/colors.js';
 
 import styles from './home.style.js';
 
-export default function Home() {
+export default function Home({ navigation }) {
     const defaultStats = {
         confirmed: 0,
         canceled: 0,
@@ -20,6 +22,7 @@ export default function Home() {
     };
     const { showToast } = useToast();
     const { getText } = useLanguage();
+    const { setFilterData } = useFilter();
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState(defaultStats);
     const getStats = async () => {
@@ -51,6 +54,17 @@ export default function Home() {
             showToast(getText('home.error.getData'));
         }
     };
+
+    const onPressMetric = (status) => {
+        navigation.navigate(getText('daysoff.title'));
+        setFilterData({
+            start: DayJS().startOf('month').toDate(),
+            end: DayJS().endOf('month').toDate(),
+            dayoffTypes: [],
+            slackUsers: [],
+            status
+        });
+    };
     useEffect(() => {
         getStats();
     }, []);
@@ -73,6 +87,11 @@ export default function Home() {
                             value={stats.confirmed}
                             label={getText('daysoff.status.confirmed')}
                             style={styles.metric}
+                            onPress={() => onPressMetric([{
+                                icon: 'check',
+                                id: 'confirmed',
+                                name: 'Confirmé'
+                            }])}
                         />
                         <Metric
                             icon="minus"
@@ -80,6 +99,11 @@ export default function Home() {
                             value={stats.pending}
                             label={getText('daysoff.status.pending')}
                             style={styles.metric}
+                            onPress={() => onPressMetric([{
+                                icon: 'minus',
+                                id: 'pending',
+                                name: 'En attente'
+                            }])}
                         />
                     </View>
                     <View style={styles.metricsRow}>
@@ -89,6 +113,11 @@ export default function Home() {
                             value={stats.canceled}
                             label={getText('daysoff.status.canceled')}
                             style={styles.metric}
+                            onPress={() => onPressMetric([{
+                                icon: 'window-close',
+                                id: 'canceled',
+                                name: 'Annulé'
+                            }])}
                         />
                         <Metric
                             colored={false}
@@ -96,6 +125,7 @@ export default function Home() {
                             label={getText('metric.total')}
                             style={styles.metric}
                             raw
+                            onPress={() => onPressMetric([])}
                         />
                     </View>
                 </View>
@@ -103,3 +133,10 @@ export default function Home() {
         </Page>
     );
 }
+
+Home.propTypes = {
+    // ViewPropTypes.style is deprecated
+    // it's replaced with PropTypes.object for now
+    // eslint-disable-next-line react/forbid-prop-types
+    navigation: PropTypes.object.isRequired
+};

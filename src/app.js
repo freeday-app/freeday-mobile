@@ -1,5 +1,6 @@
 import React from 'react';
 import { registerRootComponent } from 'expo';
+import { NavigationContainer } from '@react-navigation/native';
 
 import { ToastProvider } from './components/contexts/toast.js';
 import { AuthProvider } from './components/contexts/auth.js';
@@ -11,13 +12,15 @@ function App() {
     return (
         <LanguageProvider>
             <ThemeProvider>
-                <ToastProvider>
-                    <AuthProvider>
+                <NavigationContainer>
+                    <ToastProvider>
                         <AuthProvider>
-                            <Router />
+                            <AuthProvider>
+                                <Router />
+                            </AuthProvider>
                         </AuthProvider>
-                    </AuthProvider>
-                </ToastProvider>
+                    </ToastProvider>
+                </NavigationContainer>
             </ThemeProvider>
         </LanguageProvider>
     );
