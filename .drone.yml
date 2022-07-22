@@ -1,0 +1,24 @@
+kind: pipeline
+type: docker
+name: freeday-mobile
+
+trigger:
+  branch:
+  - dev
+  event:
+  - push
+  - pull_request
+
+steps:
+- name: install
+  image: node
+  pull: if-not-exists
+  commands:
+  - npm ci
+- name: lint
+  image: node
+  pull: if-not-exists
+  depends_on:
+  - install
+  commands:
+  - npm run lint
