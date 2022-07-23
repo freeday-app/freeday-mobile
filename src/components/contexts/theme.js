@@ -5,6 +5,7 @@ import React, {
     useEffect,
     useMemo
 } from 'react';
+import { StatusBar } from 'react-native';
 import {
     Provider as PaperProvider,
     DefaultTheme,
@@ -26,7 +27,8 @@ const themes = {
             surface: '#ffffff',
             text: '#000000',
             disabled: '#a1a1a1',
-            placeholder: '#a1a1a1'
+            placeholder: '#a1a1a1',
+            navBar: '#5A6DAF'
         }
     },
     dark: {
@@ -40,7 +42,8 @@ const themes = {
             surface: '#4f4f4f',
             text: '#ffffff',
             disabled: '#cccccc',
-            placeholder: '#cccccc'
+            placeholder: '#cccccc',
+            navBar: '#4f4f4f'
         }
     }
 };
@@ -81,6 +84,10 @@ export function ThemeProvider({ children }) {
     return (
         <ThemeContext.Provider value={contextValue}>
             <PaperProvider theme={themeData}>
+                <StatusBar
+                    barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+                    backgroundColor={themeData.colors.background}
+                />
                 {children}
             </PaperProvider>
         </ThemeContext.Provider>

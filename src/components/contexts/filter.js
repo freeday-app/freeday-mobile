@@ -41,24 +41,6 @@ export function FilterProvider({ children }) {
     const { language, getText } = useLanguage();
     const { themeData } = useTheme();
 
-    const [filterMetaData, setFilterMetaData] = useState({
-        dayoffTypes: [],
-        slackUsers: [],
-        status: [{
-            id: 'confirmed',
-            name: getText('daysoff.status.confirmed'),
-            icon: 'check'
-        }, {
-            id: 'canceled',
-            name: getText('daysoff.status.canceled'),
-            icon: 'window-close'
-        }, {
-            id: 'pending',
-            name: getText('daysoff.status.pending'),
-            icon: 'minus'
-        }]
-    });
-
     const defaultFilterData = {
         start: DayJS().startOf('month').toDate(),
         end: DayJS().endOf('month').toDate(),
@@ -67,6 +49,25 @@ export function FilterProvider({ children }) {
         status: []
     };
 
+    const availableStatus = [{
+        id: 'confirmed',
+        name: getText('daysoff.status.confirmed'),
+        icon: 'check'
+    }, {
+        id: 'canceled',
+        name: getText('daysoff.status.canceled'),
+        icon: 'window-close'
+    }, {
+        id: 'pending',
+        name: getText('daysoff.status.pending'),
+        icon: 'minus'
+    }];
+
+    const [filterMetaData, setFilterMetaData] = useState({
+        dayoffTypes: [],
+        slackUsers: [],
+        status: availableStatus
+    });
     const [filterData, setFilterData] = useState(defaultFilterData);
     const [filterVisible, setFilterVisible] = useState(false);
     const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -123,6 +124,12 @@ export function FilterProvider({ children }) {
         }
     };
 
+    const getStatus = (statusId) => (
+        availableStatus.find(({ id }) => (
+            statusId === id
+        )) ?? null
+    );
+
     useEffect(() => {
         getFilterMetaData();
     }, []);
@@ -137,14 +144,22 @@ export function FilterProvider({ children }) {
 
     const contextValue = useMemo(() => ({
         filterData,
+        setFilterData,
         showFilter,
+        resetFilter,
         activeFilterCount,
-        isFilterActive
+        isFilterActive,
+        defaultFilterData,
+        getStatus
     }), [
         filterData,
+        setFilterData,
         showFilter,
+        resetFilter,
         activeFilterCount,
-        isFilterActive
+        isFilterActive,
+        defaultFilterData,
+        getStatus
     ]);
 
     return (

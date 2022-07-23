@@ -2,15 +2,18 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     surface: {
-        alignItems: 'center',
         borderRadius: 10,
-        display: 'flex',
-        elevation: 5,
-        flexDirection: 'row',
-        padding: 10
+        elevation: 5
     },
     surfaceRaw: {
         elevation: 0
+    },
+    pressable: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 10,
+        width: '100%'
     },
     leftIcon: {
         margin: 10

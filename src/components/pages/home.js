@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import DayJS from 'dayjs';
+import { useNavigation } from '@react-navigation/native';
 
 import { useToast } from '../contexts/toast.js';
 import { useLanguage } from '../contexts/language.js';
+import { useFilter } from '../contexts/filter.js';
 import Metric from '../atoms/metric.js';
 import Page from '../organisms/page.js';
 import API from '../../helpers/api.js';
@@ -18,10 +20,19 @@ export default function Home() {
         pending: 0,
         total: 0
     };
+
+    const navigation = useNavigation();
     const { showToast } = useToast();
     const { getText } = useLanguage();
+    const {
+        setFilterData,
+        defaultFilterData,
+        getStatus
+    } = useFilter();
+
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState(defaultStats);
+
     const getStats = async () => {
         try {
             const { daysoff: resultDaysoff } = await API.call({
@@ -51,9 +62,21 @@ export default function Home() {
             showToast(getText('home.error.getData'));
         }
     };
+
+    const onPressMetric = (statusId = null) => {
+        setFilterData({
+            ...defaultFilterData,
+            status: statusId ? [
+                getStatus(statusId)
+            ] : []
+        });
+        navigation.navigate('Daysoff');
+    };
+
     useEffect(() => {
         getStats();
     }, []);
+
     return (
         <Page
             header
@@ -73,6 +96,7 @@ export default function Home() {
                             value={stats.confirmed}
                             label={getText('daysoff.status.confirmed')}
                             style={styles.metric}
+                            onPress={() => onPressMetric('confirmed')}
                         />
                         <Metric
                             icon="minus"
@@ -80,6 +104,7 @@ export default function Home() {
                             value={stats.pending}
                             label={getText('daysoff.status.pending')}
                             style={styles.metric}
+                            onPress={() => onPressMetric('pending')}
                         />
                     </View>
                     <View style={styles.metricsRow}>
@@ -89,6 +114,7 @@ export default function Home() {
                             value={stats.canceled}
                             label={getText('daysoff.status.canceled')}
                             style={styles.metric}
+                            onPress={() => onPressMetric('canceled')}
                         />
                         <Metric
                             colored={false}
@@ -96,6 +122,7 @@ export default function Home() {
                             label={getText('metric.total')}
                             style={styles.metric}
                             raw
+                            onPress={() => onPressMetric()}
                         />
                     </View>
                 </View>

@@ -6,6 +6,7 @@ import { AuthProvider } from './components/contexts/auth.js';
 import { ThemeProvider } from './components/contexts/theme.js';
 import { LanguageProvider } from './components/contexts/language.js';
 import Router from './components/organisms/router.js';
+import { FilterProvider } from './components/contexts/filter.js';
 
 function App() {
     return (
@@ -14,7 +15,9 @@ function App() {
                 <ToastProvider>
                     <AuthProvider>
                         <AuthProvider>
-                            <Router />
+                            <FilterProvider>
+                                <Router />
+                            </FilterProvider>
                         </AuthProvider>
                     </AuthProvider>
                 </ToastProvider>
