@@ -1,6 +1,9 @@
 {
+	"name": "freeday-mobile",
+	"version": "1.0.0",
+	"author": "Coddity",
+	"description": "Freeday mobile app",
   "main": "node_modules/expo/AppEntry.js",
-  "private": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
